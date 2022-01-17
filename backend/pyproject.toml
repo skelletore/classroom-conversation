@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "classroom-conversation-api"
+version = "1.0.0"
+description = ""
+authors = ["marteloge", "netr0m <netr0m@pm.me>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Django = "^4.0.1"
+psycopg2-binary = "^2.9.3"
+networkx = "^2.6.3"
+django-crispy-forms = "^1.13.0"
+djangorestframework = "^3.13.1"
+gunicorn = "^20.1.0"
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^2.16.0"
+black = "^21.12b0"
+flake8 = "^4.0.1"
+bandit = "^1.7.1"
+safety = "^1.10.3"
+
+[tool.black]
+line-length = 119
+target-version = ['py39']
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+)/
+'''
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
