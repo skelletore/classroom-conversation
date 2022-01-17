@@ -1,18 +1,18 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import { motion } from "framer-motion";
+import React from 'react'
+import { useHistory } from 'react-router-dom'
+import { motion } from 'framer-motion'
 
-import { PauseProps } from "./../types";
-import { getSelectedAvatar } from "./../helpers";
+import { PauseProps } from './../types'
+import { getSelectedAvatar } from './../helpers'
 
-import teacherWoman from "./../static/teacher_woman.png";
-import teacherMan from "./../static/teacher_man.png";
+import teacherWoman from './../static/teacher_woman.png'
+import teacherMan from './../static/teacher_man.png'
 
-import { StyledPause, StyledAlternatives } from "./Pause.styled";
+import { StyledPause, StyledAlternatives } from './Pause.styled'
 
 const Pause = ({ uuid, id, next, current }: PauseProps) => {
-  const history = useHistory();
-  const avatar = getSelectedAvatar();
+  const history = useHistory()
+  const avatar = getSelectedAvatar()
 
   return (
     <StyledPause>
@@ -20,7 +20,7 @@ const Pause = ({ uuid, id, next, current }: PauseProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        key={"student_" + id}
+        key={'student_' + id}
         className="student"
       >
         {current.label}
@@ -49,7 +49,7 @@ const Pause = ({ uuid, id, next, current }: PauseProps) => {
             transition={{ delay: 2 }}
             key="alternatives"
             onClick={() =>
-              history.push("/conversation/" + uuid + "/question/" + id)
+              history.push('/conversation/' + uuid + '/question/' + id)
             }
           >
             {next.label}
@@ -57,7 +57,7 @@ const Pause = ({ uuid, id, next, current }: PauseProps) => {
         </div>
       </StyledAlternatives>
     </StyledPause>
-  );
-};
+  )
+}
 
-export default Pause;
+export default Pause

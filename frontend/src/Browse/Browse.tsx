@@ -1,24 +1,24 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
+import React from 'react'
+import { useHistory } from 'react-router-dom'
 
-import { StyledBrowse, StyledLinks } from "./Browse.styled";
+import { StyledBrowse, StyledLinks } from './Browse.styled'
 
-import { useFetch } from "../hooks";
-import Loading from "../Loading/Loading";
-import Notfound from "../Notfound/Notfound";
-import { Conversation } from "../types";
+import { useFetch } from '../hooks'
+import Loading from '../Loading/Loading'
+import Notfound from '../Notfound/Notfound'
+import { Conversation } from '../types'
 
 const Browse = () => {
-  const history = useHistory();
+  const history = useHistory()
 
-  const [data, loading] = useFetch<Array<Conversation>>("/api/document");
+  const [data, loading] = useFetch<Array<Conversation>>('/api/document')
 
   if (loading) {
-    return <Loading />;
+    return <Loading />
   }
 
   if (!data) {
-    return <Notfound />;
+    return <Notfound />
   }
 
   return (
@@ -40,7 +40,7 @@ const Browse = () => {
         ))}
       </StyledLinks>
     </StyledBrowse>
-  );
-};
+  )
+}
 
-export default Browse;
+export default Browse

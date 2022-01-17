@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
-import { calculateResponsiveSize } from "./../helpers";
+import { calculateResponsiveSize } from './../helpers'
 
 export const StyledPause = styled.div`
   display: flex;
@@ -12,7 +12,7 @@ export const StyledPause = styled.div`
   h1 {
     text-align: center;
   }
-`;
+`
 
 export const StyledAlternatives = styled.div`
   width: 100%;
@@ -43,4 +43,4 @@ export const StyledAlternatives = styled.div`
       justify-content: space-around;
     }
   }
-`;
+`

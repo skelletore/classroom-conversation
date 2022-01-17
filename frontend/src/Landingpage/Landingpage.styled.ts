@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 const StyledLandingPage = styled.div`
   width: 100%;
@@ -17,6 +17,6 @@ const StyledLandingPage = styled.div`
     color: darkgray;
     cursor: pointer;
   }
-`;
+`
 
-export default StyledLandingPage;
+export default StyledLandingPage

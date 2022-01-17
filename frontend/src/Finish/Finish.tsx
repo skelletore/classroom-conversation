@@ -1,22 +1,22 @@
-import React from "react";
-import { useParams, useHistory } from "react-router-dom";
+import React from 'react'
+import { useParams, useHistory } from 'react-router-dom'
 
-import { StyledFinish } from "./Finish.styled";
+import { StyledFinish } from './Finish.styled'
 
 import {
   removeConversation,
   getRecordedConversation,
   getSelectedAvatar,
   getSelectedStudent,
-} from "./../helpers";
-import { UrlParams, Questions, Question, Answers, Answer } from "./../types";
+} from './../helpers'
+import { UrlParams, Questions, Question, Answers, Answer } from './../types'
 
-import clock from "./../static/clock.png";
+import clock from './../static/clock.png'
 
-import teacherFemale from "./../static/teacher_woman.png";
-import teacherMale from "./../static/teacher_man.png";
-import studentGirl from "./../static/student_girl.png";
-import studentBoy from "./../static/student_boy.png";
+import teacherFemale from './../static/teacher_woman.png'
+import teacherMale from './../static/teacher_man.png'
+import studentGirl from './../static/student_girl.png'
+import studentBoy from './../static/student_boy.png'
 
 import {
   PDFDownloadLink,
@@ -27,103 +27,103 @@ import {
   StyleSheet,
   Font,
   Image,
-} from "@react-pdf/renderer";
+} from '@react-pdf/renderer'
 
 Font.register({
-  family: "opensans",
+  family: 'opensans',
   src:
-    "https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0ef8pkAg.ttf",
-});
+    'https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0ef8pkAg.ttf',
+})
 
 Font.register({
-  family: "gloriahallelujah",
+  family: 'gloriahallelujah',
   src:
-    "https://fonts.gstatic.com/s/gloriahallelujah/v11/LYjYdHv3kUk9BMV96EIswT9DIbW-MIS11zamvVCE.ttf",
-});
+    'https://fonts.gstatic.com/s/gloriahallelujah/v11/LYjYdHv3kUk9BMV96EIswT9DIbW-MIS11zamvVCE.ttf',
+})
 
 const styles = StyleSheet.create({
   page: {
     padding: 20,
-    border: "2 dotted black",
-    fontFamily: "opensans",
+    border: '2 dotted black',
+    fontFamily: 'opensans',
   },
   section: {
-    textAlign: "left",
+    textAlign: 'left',
     margin: 15,
   },
   question: { fontSize: 14, marginBottom: 3 },
   answer: { fontSize: 12 },
   notes: {
-    height: "91%",
-    margin: "5%",
-    border: "2 dotted black",
-    fontFamily: "opensans",
+    height: '91%',
+    margin: '5%',
+    border: '2 dotted black',
+    fontFamily: 'opensans',
   },
   header: {
     margin: 20,
-    fontFamily: "opensans",
+    fontFamily: 'opensans',
     fontSize: 20,
-    textAlign: "center",
+    textAlign: 'center',
   },
   introPage: {
-    height: "100%",
+    height: '100%',
   },
   conversatioName: {
-    fontFamily: "gloriahallelujah",
-    textAlign: "center",
+    fontFamily: 'gloriahallelujah',
+    textAlign: 'center',
     fontSize: 35,
-    margin: "5%",
-    marginTop: "20%",
+    margin: '5%',
+    marginTop: '20%',
   },
   conversationDescription: {
-    fontFamily: "opensans",
-    textAlign: "center",
+    fontFamily: 'opensans',
+    textAlign: 'center',
     fontSize: 17,
-    margin: "10%",
+    margin: '10%',
   },
   conversationDate: {
-    fontFamily: "opensans",
+    fontFamily: 'opensans',
     fontSize: 12,
-    textAlign: "center",
+    textAlign: 'center',
     bottom: 20,
-    position: "absolute",
-    color: "darkgrey",
+    position: 'absolute',
+    color: 'darkgrey',
   },
   teacher: {
     width: 200,
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     left: 10,
   },
   student: {
     width: 150,
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     right: 10,
   },
-});
+})
 
 type PDFProps = {
-  name: string;
-  intro: string;
-  questions: Questions;
-  dialog: string[];
-  answers: Answers;
-  student: string;
-  teacher: string;
-};
+  name: string
+  intro: string
+  questions: Questions
+  dialog: string[]
+  answers: Answers
+  student: string
+  teacher: string
+}
 
 type FinishProps = {
-  name: string;
-  intro: string;
-  questions: Questions;
-  answers: Answers;
-};
+  name: string
+  intro: string
+  questions: Questions
+  answers: Answers
+}
 
 const getDate = () => {
-  const now = new Date();
-  return now.getDate() + "-" + (now.getMonth() + 1) + "-" + now.getFullYear();
-};
+  const now = new Date()
+  return now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear()
+}
 
 const PDFDocument = ({
   name,
@@ -146,8 +146,8 @@ const PDFDocument = ({
 
     <Page size="A4" style={styles.page}>
       {dialog.map((q, i) => {
-        const question: Question = questions[q];
-        const answer: Answer = answers[questions[q].selectedAnswer];
+        const question: Question = questions[q]
+        const answer: Answer = answers[questions[q].selectedAnswer]
 
         return (
           <View key={i} style={styles.section}>
@@ -157,11 +157,11 @@ const PDFDocument = ({
             </Text>
             {answer && i < dialog.length - 1 && (
               <Text style={styles.answer}>
-                Elev: {answer ? answer.label : ""}
+                Elev: {answer ? answer.label : ''}
               </Text>
             )}
           </View>
-        );
+        )
       })}
     </Page>
     <Page size="A4">
@@ -170,16 +170,16 @@ const PDFDocument = ({
       </View>
     </Page>
   </Document>
-);
+)
 
 const Finish = ({ name, intro, questions, answers }: FinishProps) => {
-  const history = useHistory();
-  const { uuid } = useParams<UrlParams>();
+  const history = useHistory()
+  const { uuid } = useParams<UrlParams>()
 
   const teacherImg: string =
-    getSelectedAvatar() === 1 ? teacherFemale : teacherMale;
+    getSelectedAvatar() === 1 ? teacherFemale : teacherMale
   const studentImg: string =
-    getSelectedStudent(uuid) === 1 ? studentGirl : studentBoy;
+    getSelectedStudent(uuid) === 1 ? studentGirl : studentBoy
 
   return (
     <StyledFinish>
@@ -187,8 +187,8 @@ const Finish = ({ name, intro, questions, answers }: FinishProps) => {
       <div>
         <button
           onClick={() => {
-            removeConversation(uuid);
-            history.push("/conversation/" + uuid + "/start");
+            removeConversation(uuid)
+            history.push('/conversation/' + uuid + '/start')
           }}
         >
           Start samtalen på ny
@@ -207,21 +207,21 @@ const Finish = ({ name, intro, questions, answers }: FinishProps) => {
               teacher={teacherImg}
             />
           }
-          fileName={"test.pdf"}
+          fileName={'test.pdf'}
         >
           {({ loading }: { loading: boolean }) =>
-            loading ? "Loading document..." : "Last ned samtale"
+            loading ? 'Loading document...' : 'Last ned samtale'
           }
         </PDFDownloadLink>
 
-        <button onClick={() => history.push("/browse/")}>
+        <button onClick={() => history.push('/browse/')}>
           Velg ny samtale
         </button>
       </div>
 
       <img src={clock} alt="Clock icon"></img>
     </StyledFinish>
-  );
-};
+  )
+}
 
-export default Finish;
+export default Finish

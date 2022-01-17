@@ -5,18 +5,18 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/**/*.{ts,tsx,js}'],
   transform: {
-      '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
+    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'node'],
   coverageDirectory: '<rootDir>/coverage',
   verbose: true,
   coverageThreshold: {
-      global: {
-        branches: 10,
-        functions: 15,
-        lines: 15,
-        statements: 15,
-      },
+    global: {
+      branches: 10,
+      functions: 15,
+      lines: 15,
+      statements: 15,
+    },
   },
-  coverageReporters: ['json-summary', 'text', 'lcov']
+  coverageReporters: ['json-summary', 'text', 'lcov'],
 }

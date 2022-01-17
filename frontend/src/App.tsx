@@ -1,15 +1,15 @@
-import React from "react";
-import { createGlobalStyle } from "styled-components";
+import React from 'react'
+import { createGlobalStyle } from 'styled-components'
 
-import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
+import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
 
-import Landingpage from "./Landingpage/Landingpage";
-import ConversationComponent from "./Conversation/Conversation";
-import Start from "./Start/Start";
+import Landingpage from './Landingpage/Landingpage'
+import ConversationComponent from './Conversation/Conversation'
+import Start from './Start/Start'
 
-import background from "./static/background-small.png";
-import Browse from "./Browse/Browse";
-import Credits from "./Credits/Credits";
+import background from './static/background-small.png'
+import Browse from './Browse/Browse'
+import Credits from './Credits/Credits'
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -55,7 +55,7 @@ const GlobalStyle = createGlobalStyle`
     background-color: #363334;
     border: none;
   }
-`;
+`
 
 function App() {
   return (
@@ -74,7 +74,7 @@ function App() {
         />
       </Switch>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App

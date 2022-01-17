@@ -1,16 +1,12 @@
-import React from "react";
+import React from 'react'
 
-import {
-  StyledCreditPage,
-  StyledCredits,
-  StyledCredit,
-} from "./Credits.styled";
+import { StyledCreditPage, StyledCredits, StyledCredit } from './Credits.styled'
 
-import studentGirl from "./../static/student_girl.png";
-import studentBoy from "./../static/student_boy.png";
-import teacherMan from "./../static/teacher_man.png";
-import teacherWoman from "./../static/teacher_woman.png";
-import clock from "./../static/clock.png";
+import studentGirl from './../static/student_girl.png'
+import studentBoy from './../static/student_boy.png'
+import teacherMan from './../static/teacher_man.png'
+import teacherWoman from './../static/teacher_woman.png'
+import clock from './../static/clock.png'
 
 const Credits = () => (
   <StyledCreditPage>
@@ -23,7 +19,7 @@ const Credits = () => (
           <a href="https://www.flaticon.com/authors/freepik" title="Freepik">
             Freepik
           </a>
-          {" fra "}
+          {' fra '}
           <a href="https://www.flaticon.com/" title="Flaticon">
             Flaticon
           </a>
@@ -36,7 +32,7 @@ const Credits = () => (
           <a href="https://www.flaticon.com/authors/freepik" title="Freepik">
             Freepik
           </a>
-          {" fra "}
+          {' fra '}
           <a href="https://www.flaticon.com/" title="Flaticon">
             Flaticon
           </a>
@@ -49,7 +45,7 @@ const Credits = () => (
           <a href="https://www.flaticon.com/authors/freepik" title="Freepik">
             Freepik
           </a>
-          {" fra "}
+          {' fra '}
           <a href="https://www.flaticon.com/" title="Flaticon">
             Flaticon
           </a>
@@ -62,7 +58,7 @@ const Credits = () => (
           <a href="https://www.flaticon.com/authors/monkik" title="monkik">
             monkik
           </a>
-          {" fra "}
+          {' fra '}
           <a href="https://www.flaticon.com/" title="Flaticon">
             Flaticon
           </a>
@@ -75,7 +71,7 @@ const Credits = () => (
           <a href="https://www.flaticon.com/authors/freepik" title="Freepik">
             Freepik
           </a>
-          {" fra "}
+          {' fra '}
           <a href="https://www.flaticon.com/" title="Flaticon">
             Flaticon
           </a>
@@ -83,6 +79,6 @@ const Credits = () => (
       </StyledCredit>
     </StyledCredits>
   </StyledCreditPage>
-);
+)
 
-export default Credits;
+export default Credits

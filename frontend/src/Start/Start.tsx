@@ -1,48 +1,48 @@
-import React, { useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import React, { useState } from 'react'
+import { useParams, useHistory } from 'react-router-dom'
 
-import { useFetchAndStoreConversation } from "../hooks";
+import { useFetchAndStoreConversation } from '../hooks'
 import {
   removeRecordedConversation,
   hasDialogRecorded,
   getLastQuestion,
   getSelectedAvatar,
-} from "./../helpers";
-import { StartNode, UrlParams, Conversation } from "./../types";
+} from './../helpers'
+import { StartNode, UrlParams, Conversation } from './../types'
 
-import Loading from "./../Loading/Loading";
-import Notfound from "./../Notfound/Notfound";
+import Loading from './../Loading/Loading'
+import Notfound from './../Notfound/Notfound'
 
-import StyledStart from "./Start.styled";
+import StyledStart from './Start.styled'
 
-import teacherWoman from "./../static/teacher_woman.png";
-import teacherMan from "./../static/teacher_man.png";
+import teacherWoman from './../static/teacher_woman.png'
+import teacherMan from './../static/teacher_man.png'
 
 const selectAvatar = (id: number, setAvatar: Function) => {
-  window.localStorage.setItem("avatar", "" + id);
-  setAvatar(id);
-};
+  window.localStorage.setItem('avatar', '' + id)
+  setAvatar(id)
+}
 
 const Start = () => {
-  const history = useHistory();
-  const { uuid } = useParams<UrlParams>();
-  const [selectedAvatar, setAvatar] = useState<number>(getSelectedAvatar());
+  const history = useHistory()
+  const { uuid } = useParams<UrlParams>()
+  const [selectedAvatar, setAvatar] = useState<number>(getSelectedAvatar())
 
   const [data, loading] = useFetchAndStoreConversation<Conversation>(
     `/api/document/${uuid}`,
     uuid
-  );
+  )
 
   if (loading) {
-    return <Loading />;
+    return <Loading />
   }
 
   if (!data) {
-    return <Notfound />;
+    return <Notfound />
   }
 
-  const startNode: StartNode = data.json.start;
-  const hasDialog: boolean = hasDialogRecorded(uuid);
+  const startNode: StartNode = data.json.start
+  const hasDialog: boolean = hasDialogRecorded(uuid)
 
   return (
     <StyledStart>
@@ -52,13 +52,13 @@ const Start = () => {
 
         <div className="avatars">
           <img
-            className={selectedAvatar === 1 ? "selected" : ""}
+            className={selectedAvatar === 1 ? 'selected' : ''}
             src={teacherWoman}
             onClick={() => selectAvatar(1, setAvatar)}
             alt="Female teacher avatar "
           />
           <img
-            className={selectedAvatar === 2 ? "selected" : ""}
+            className={selectedAvatar === 2 ? 'selected' : ''}
             src={teacherMan}
             onClick={() => selectAvatar(2, setAvatar)}
             alt="Male teacher avatar "
@@ -68,19 +68,19 @@ const Start = () => {
         <div className="actions">
           <button
             onClick={() => {
-              removeRecordedConversation();
+              removeRecordedConversation()
               history.push(
-                "/conversation/" + uuid + "/question/" + startNode.firstQuestion
-              );
+                '/conversation/' + uuid + '/question/' + startNode.firstQuestion
+              )
             }}
           >
-            {hasDialog ? "Start samtalen på ny" : "Start matteundervisningen"}
+            {hasDialog ? 'Start samtalen på ny' : 'Start matteundervisningen'}
           </button>
           {hasDialog && (
             <button
               onClick={() =>
                 history.push(
-                  "/conversation/" + uuid + "/question/" + getLastQuestion(uuid)
+                  '/conversation/' + uuid + '/question/' + getLastQuestion(uuid)
                 )
               }
             >
@@ -90,7 +90,7 @@ const Start = () => {
         </div>
       </div>
     </StyledStart>
-  );
-};
+  )
+}
 
-export default Start;
+export default Start
