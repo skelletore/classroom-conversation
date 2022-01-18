@@ -2,9 +2,10 @@ ARG APP_ROOT=/app
 ARG POETRY_INSTALL_ARGS="--no-interaction --no-ansi"
 ARG VENV_PATH=$APP_ROOT/.venv
 
-FROM python:3.9-slim AS base
-
-# set environment variables
+FROM python:3.10-slim AS base
+ARG APP_ROOT \
+    VENV_PATH
+# Set environment variables
 ENV VENV_PATH=$VENV_PATH \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -15,6 +16,7 @@ ENV VENV_PATH=$VENV_PATH \
 ENV PATH="$VENV_PATH/bin:$PATH"
 
 WORKDIR $APP_ROOT
+CMD ["gunicorn", "classroomconversation.wsgi:application", "--bind", "0.0.0.0:8000"]
 
 COPY pyproject.toml poetry.lock ./
 COPY classroomconversation ./
@@ -39,7 +41,7 @@ RUN poetry install $POETRY_INSTALL_ARGS
 
 FROM base AS development
 ARG VENV_PATH
-COPY --from=app-dev $VENV_PATH $VENV_PATH
+COPY --from=app-dev $VENV_PATH/ $VENV_PATH/
 COPY .flake8 .bandit ./
 ### END dev stage ###
 
