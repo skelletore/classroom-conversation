@@ -151,7 +151,8 @@ LOGIN_URL = "/account/login/"
 LOGIN_REDIRECT_URL = "/upload"
 LOGOUT_REDIRECT_URL = None
 
-if os.environ.get("USE_SSL", default=False):
+if os.getenv("USE_SSL", "False") == "True":
+    print("SSL Enabled")
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
