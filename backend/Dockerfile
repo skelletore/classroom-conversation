@@ -40,9 +40,13 @@ ARG POETRY_INSTALL_ARGS
 RUN poetry install $POETRY_INSTALL_ARGS
 
 FROM base AS development
-ARG VENV_PATH
+ARG APP_ROOT \
+    VENV_PATH
 COPY --from=app-dev $VENV_PATH/ $VENV_PATH/
 COPY .flake8 .bandit ./
+VOLUME [ "$VENV_PATH" ]
+VOLUME [ "$APP_ROOT" ]
+CMD ["python3", "manage.py", "runserver"]
 ### END dev stage ###
 
 ### prod stage ###
