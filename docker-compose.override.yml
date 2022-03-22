@@ -16,6 +16,8 @@ services:
       target: development
     volumes:
       - ./backend/classroomconversation:/app
+    ports:
+      - 5678:5678
     
   frontend:
     image: classroom-conversation/frontend:latest
