@@ -46,7 +46,7 @@ COPY --from=app-dev $VENV_PATH/ $VENV_PATH/
 COPY .flake8 .bandit ./
 VOLUME [ "$VENV_PATH" ]
 VOLUME [ "$APP_ROOT" ]
-CMD ["python3", "manage.py", "runserver"]
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
 ### END dev stage ###
 
 ### prod stage ###
