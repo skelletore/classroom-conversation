@@ -3,7 +3,6 @@ from django.utils.translation import gettext_lazy as _
 from django.core.files import File
 
 from .models import Conversation
-from django.core.exceptions import ValidationError
 
 from .validation import (
     has_one_star_node,

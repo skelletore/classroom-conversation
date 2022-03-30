@@ -15,8 +15,9 @@ def main():
                 import debugpy
                 debugpy.listen(("0.0.0.0", 5678))
                 print('Attached!')
-            except:
+            except Exception as err:
                 print("Failed to enable remote debugger. Importing 'debugpy' failed")
+                print(err)
 
     try:
         from django.core.management import execute_from_command_line
