@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
-import { Graph, Answer, Answers, Questions } from '../types'
+import { Graph, Answer, Answers, Questions, Illustrations, Illustration } from '../types'
 import { getSelectedAvatar, getSelectedStudent } from '../helpers'
 
 import teacherWoman from './../static/teacher_woman.png'
@@ -15,6 +15,7 @@ import {
   StyledAlternatives,
   StyledAnswer,
   StyledIcons,
+  StyledIllustration
 } from './Question.styled'
 
 type Props = {
@@ -26,13 +27,35 @@ type Props = {
 const QuestionComponent = ({ graph, uuid, id }: Props) => {
   const history = useHistory()
   const questions: Questions = graph.questions
+  const illustrations: Illustrations = graph.illustrations || {}
   const answers: Answers = graph.answers
   const question = questions[id]
+  const [illustration, setIllustration] = useState<Illustration>()
   const randomAnswer: Answer = answers[question.selectedAnswer]
   const alternatives: Array<string> = randomAnswer.alternatives
 
   const student = getSelectedStudent(uuid)
   const avatar = getSelectedAvatar()
+
+  useEffect(() => {
+    let illustrationId
+    if (Object.keys(illustrations).includes(id)) {
+      illustrationId = id
+    } else if (Object.keys(illustrations).includes(randomAnswer.id)) {
+      illustrationId = randomAnswer.id
+    } else {
+      setIllustration(undefined)
+    }
+    if (illustrationId) {
+      let _illustrations: Array<Illustration> = illustrations[illustrationId]
+      if (_illustrations.length === 1) {
+        setIllustration(_illustrations[0])
+      } else {
+        console.warn('Found multiple illustrations, but support has not yet been implemented. Using first item.')
+        setIllustration(_illustrations[0])
+      }
+    }
+  }, [questions, illustrations, answers, question, randomAnswer])
 
   return (
     <StyledQuestion>
@@ -58,6 +81,14 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
           {answers[randomAnswer.id].label || ''}
         </motion.h2>
       </StyledAnswer>
+
+      {illustration && (
+        <StyledIllustration
+          className="styledIllustration"
+          src={illustration.img}
+          alt={illustration.label || "Illustration"}
+        />
+      )}
 
       <StyledAlternatives>
         <StyledIcons>
@@ -90,7 +121,7 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
                     history.push('/conversation/' + uuid + '/question/' + id)
                   }
                 >
-                  <p>{questions[id].label}</p>
+                  <p>{questions[id]?.label || "Missing node label"}</p>
                 </motion.button>
               ))}
             </>
