@@ -16,6 +16,8 @@ from .validation import (
     one_type_of_child_nodes,
     only_single_chained_questions,
     all_nodes_contains_labels,
+    questions_have_questions,
+    questions_have_answers,
 )
 
 
@@ -61,8 +63,11 @@ class ConversationForm(forms.ModelForm):
         if not one_type_of_child_nodes(file):
             raise forms.ValidationError(_("validation.doc.child.nodes.type"))
 
-        if not only_single_chained_questions(file):
-            raise forms.ValidationError(_("validation.doc.single.chained.questions"))
+        if questions_have_questions(file):
+            raise forms.ValidationError(_("validation.doc.question.has.question"))
+
+        if not questions_have_answers(file):
+            raise forms.ValidationError(_("validation.doc.question.needs.answer"))
 
         if not all_nodes_contains_labels(file):
             raise forms.ValidationError(_("validation.doc.missing.node.label"))
