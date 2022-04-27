@@ -113,7 +113,8 @@ def get_node_shape(node, root):
     node_shape = None
     graphml = get_graphml()
     data_key_id = get_node_data_key(root)
-    data = node.find(graphml.get("data") + "[@key='" + data_key_id + "']")
+    graph_key = graphml.get("data") + "[@key='" + data_key_id + "']"
+    data = node.find(graph_key)
     shapenode = data.find(graphml.get("shapenode"))
 
     if shapenode is not None:
@@ -146,6 +147,11 @@ def is_octagon(node, root):
     return "octagon" in node_shape if node_shape else False
 
 
+def is_hexagon(node, root):
+    node_shape = get_node_shape(node, root)
+    return "hexagon" in node_shape if node_shape else False
+
+
 def get_all_rectangles(graph, root):
     return [node for node in get_all_nodes(graph) if is_rectangle(node, root)]
 
@@ -157,19 +163,62 @@ def find_answers(edges, uniform, root, graph):
     answers = []
     for edge in edges:
         target = edge.get("target")
-        answer_node = get_node_by_id(target, graph)
-        answer_shape = get_node_shape(answer_node, root)
+        node = get_node_by_id(target, graph)
+        shape = get_node_shape(node, root)
+        if not is_hexagon(node, root):
+            if not uniform:
+                probability = 0
+                try:
+                    probability = float(get_edge_label(edge, root))
+                except ValueError:
+                    pass
 
-        if not uniform:
-            probability = 0
-            try:
-                probability = float(get_edge_label(edge, root))
-            except ValueError:
-                pass
-
-            answers.append(
-                {"id": target, "shape": answer_shape, "probability": probability}
-            )
-        else:
-            answers.append({"id": target, "shape": answer_shape})
+                answers.append(
+                    {"id": target, "shape": shape, "probability": probability}
+                )
+            else:
+                answers.append({"id": target, "shape": shape})
     return answers
+
+
+def find_alternatives(edges, root, graph):
+    alternatives = []
+    for edge in edges:
+        target = edge.get("target")
+        node = get_node_by_id(target, graph)
+        if not is_hexagon(node, root):
+            alternatives.append(target)
+    return alternatives
+
+
+def is_valid_img_src(src: str) -> bool:
+    # TODO: FIX
+    PERMITTED_IMG_SOURCES = ["*"]
+    def is_permitted():
+        if not PERMITTED_IMG_SOURCES:
+            return False
+        if PERMITTED_IMG_SOURCES[0] == "*":
+            return True
+        # TODO: get base domain
+        if src in PERMITTED_IMG_SOURCES:
+            return True
+        return False
+    return is_permitted()
+
+
+def find_illustrations(edges, root, graph):
+    errors = []
+    illustrations = []
+    for edge in edges:
+        target = edge.get("target")
+        node = get_node_by_id(target, graph)
+        if is_hexagon(node, root):
+            label = get_node_label(node, root)
+            if is_valid_img_src(label):
+                illustrations.append(
+                    {"id": target, "img": label}
+                )
+            else:
+                errors.append(f"Illustration linked to {target} is not a valid image source.")
+
+    return illustrations, errors
