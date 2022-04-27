@@ -3,7 +3,7 @@ FROM node:16-alpine AS base
 ARG APP_ROOT=/app
 
 WORKDIR $APP_ROOT
-COPY package.json yarn.lock ./
+COPY package.json ./
 COPY ./public ./public
 COPY ./src ./src
 RUN yarn install --frozen-lockfile
