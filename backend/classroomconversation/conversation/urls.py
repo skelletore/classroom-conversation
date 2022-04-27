@@ -14,5 +14,3 @@ urlpatterns = [
     path("upload/list", views.document_list, name="document_list"),
     path("upload", views.upload_document, name="upload_document"),
 ]
-
-print(urlpatterns)
