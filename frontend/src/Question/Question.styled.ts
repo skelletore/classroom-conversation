@@ -35,6 +35,16 @@ export const StyledAnswer = styled.div`
   }
 `
 
+export const StyledIllustration = styled.img`
+  align-items: center;
+  text-align: center;
+  max-width: 25%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+`
+
 export const StyledAlternatives = styled.div`
   width: 100%;
   display: flex;
