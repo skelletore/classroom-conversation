@@ -1,6 +1,7 @@
 ARG APP_ROOT=/app
 ARG POETRY_INSTALL_ARGS="--no-interaction --no-ansi"
 ARG VENV_PATH=$APP_ROOT/.venv
+ARG APT_INSTALL_ARGS="-qq --no-install-recommends -o Dpkg::Use-Pty=0"
 
 FROM python:3.10-slim AS base
 ARG APP_ROOT \
@@ -23,12 +24,8 @@ COPY classroomconversation ./
 
 # Install packages and dependencies
 FROM base AS base-deps
-ARG APT_INSTALL_ARGS="-qq --no-install-recommends -o Dpkg::Use-Pty=0"
 ## Install required OS packages
-RUN apt-get update -qq && \
-    apt-get install $APT_INSTALL_ARGS gettext && \
-    rm -rf "/var/cache/apt/*" "/var/lib/apt/lists/*"
-## Install Poetry
+### Install Poetry
 RUN pip install -q --upgrade pip && \
     pip install -q poetry && \
     poetry config virtualenvs.in-project true
@@ -41,7 +38,13 @@ RUN poetry install $POETRY_INSTALL_ARGS
 
 FROM base AS development
 ARG APP_ROOT \
-    VENV_PATH
+    VENV_PATH \
+    APT_INSTALL_ARGS
+
+RUN apt-get update -qq && \
+    apt-get install $APT_INSTALL_ARGS gettext && \
+    rm -rf "/var/cache/apt/*" "/var/lib/apt/lists/*"
+
 COPY --from=app-dev $VENV_PATH/ $VENV_PATH/
 COPY .flake8 .bandit ./
 VOLUME [ "$VENV_PATH" ]
