@@ -25,6 +25,16 @@ export type Answers = {
   [id: string]: Answer
 }
 
+export type Illustration = {
+  id: string
+  label?: string
+  img: string
+}
+
+export type Illustrations = {
+  [id: string]: Array<Illustration>
+}
+
 export type StartNode = {
   id: string
   firstQuestion: string
@@ -44,6 +54,7 @@ export type Nodes = {
 export type Graph = {
   answers: Answers
   questions: Questions
+  illustrations: Illustrations
   nodes: Nodes
   start: StartNode
   end: string
@@ -52,6 +63,7 @@ export type Graph = {
 
 export type Conversation = {
   json: Graph
+  errors: Array<string>
   name: string
   uuid: string
   end: string
