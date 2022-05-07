@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.core.files import File
 
-from .models import Conversation
+from .models import Conversation, Illustration
 
 from .validation import (
     has_one_star_node,
@@ -19,6 +19,21 @@ from .validation import (
     questions_have_questions,
     questions_have_answers,
 )
+
+
+class IllustrationForm(forms.ModelForm):
+    class Meta:
+        model = Illustration
+        fields = (
+            "name",
+            "description",
+            "image",
+        )
+        labels = {
+            "name": _("form.label.name"),
+            "description": _("form.label.description"),
+            "image": _("form.label.image"),
+        }
 
 
 class ConversationForm(forms.ModelForm):

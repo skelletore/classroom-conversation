@@ -4,6 +4,8 @@ The app consist of a Django app for admins also serving as an api and a react ap
 - `/admin`--> The admin panel to handle users and data
 - `/upload` --> Upload new conversation (.graphml)
 - `/upload/list` --> Look at all uploaded conversations
+- `/upload/illustration` --> Upload new illustration (image)
+- `/illustration/list` --> Look at all uploaded illustrations
 - `/`--> The landing page of the react app
 - `/browse` --> Browse the conversations to start
 - `/conversation/<uui>/start` --> Start conversation (the main entry to the app)
