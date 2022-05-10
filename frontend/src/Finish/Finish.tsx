@@ -180,6 +180,8 @@ const Finish = ({ name, intro, questions, answers }: FinishProps) => {
     getSelectedAvatar() === 1 ? teacherFemale : teacherMale
   const studentImg: string =
     getSelectedStudent(uuid) === 1 ? studentGirl : studentBoy
+  const finishedAt = new Date().toISOString()
+  const pdfFileName = `conversation-${finishedAt}.pdf`
 
   return (
     <StyledFinish>
@@ -207,7 +209,7 @@ const Finish = ({ name, intro, questions, answers }: FinishProps) => {
               teacher={teacherImg}
             />
           }
-          fileName={'test.pdf'}
+          fileName={pdfFileName}
         >
           {({ loading }: { loading: boolean }) =>
             loading ? 'Loading document...' : 'Last ned samtale'
