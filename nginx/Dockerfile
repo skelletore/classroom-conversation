@@ -1,11 +1,8 @@
 FROM nginx:latest as base
 
+# Copy configs
 COPY nginx.conf /etc/nginx/nginx.conf
-
-# configs
-COPY config/general.conf /etc/nginx/config/general.conf
-COPY config/security.conf /etc/nginx/config/security.conf
-COPY config/proxy.conf /etc/nginx/config/proxy.conf
+COPY config/ /etc/nginx/config/
 
 FROM base as development
 COPY sites-available/dev.conf /etc/nginx/sites-enabled/classroom-conversation.conf
