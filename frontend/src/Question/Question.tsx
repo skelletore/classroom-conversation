@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
-import { Graph, Answer, Answers, Questions, Illustrations, Illustration } from '../types'
+import {
+  Graph,
+  Answer,
+  Answers,
+  Questions,
+  Illustrations,
+  Illustration,
+} from '../types'
 import { getSelectedAvatar, getSelectedStudent } from '../helpers'
 
 import teacherWoman from './../static/teacher_woman.png'
@@ -15,7 +22,7 @@ import {
   StyledAlternatives,
   StyledAnswer,
   StyledIcons,
-  StyledIllustration
+  StyledIllustration,
 } from './Question.styled'
 
 type Props = {
@@ -51,7 +58,9 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
       if (_illustrations.length === 1) {
         setIllustration(_illustrations[0])
       } else {
-        console.warn('Found multiple illustrations, but support has not yet been implemented. Using first item.')
+        console.warn(
+          'Found multiple illustrations, but support has not yet been implemented. Using first item.'
+        )
         setIllustration(_illustrations[0])
       }
     }
@@ -86,7 +95,7 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
         <StyledIllustration
           className="styledIllustration"
           src={illustration.img}
-          alt={illustration.label || "Illustration"}
+          alt={illustration.label || 'Illustration'}
         />
       )}
 
@@ -121,7 +130,7 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
                     history.push('/conversation/' + uuid + '/question/' + id)
                   }
                 >
-                  <p>{questions[id]?.label || "Missing node label"}</p>
+                  <p>{questions[id]?.label || 'Missing node label'}</p>
                 </motion.button>
               ))}
             </>

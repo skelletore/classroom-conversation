@@ -31,14 +31,12 @@ import {
 
 Font.register({
   family: 'opensans',
-  src:
-    'https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0ef8pkAg.ttf',
+  src: 'https://fonts.gstatic.com/s/opensans/v17/mem8YaGs126MiZpBA-UFVZ0ef8pkAg.ttf',
 })
 
 Font.register({
   family: 'gloriahallelujah',
-  src:
-    'https://fonts.gstatic.com/s/gloriahallelujah/v11/LYjYdHv3kUk9BMV96EIswT9DIbW-MIS11zamvVCE.ttf',
+  src: 'https://fonts.gstatic.com/s/gloriahallelujah/v11/LYjYdHv3kUk9BMV96EIswT9DIbW-MIS11zamvVCE.ttf',
 })
 
 const styles = StyleSheet.create({
