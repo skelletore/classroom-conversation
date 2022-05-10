@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const StyledFinish = styled.div`
   min-height: 100%;
@@ -49,4 +49,4 @@ export const StyledFinish = styled.div`
   a {
     margin: 5px 10px;
   }
-`;
+`

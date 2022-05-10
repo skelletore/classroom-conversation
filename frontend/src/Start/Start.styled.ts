@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
-import { calculateResponsiveSize } from "./../helpers";
+import { calculateResponsiveSize } from './../helpers'
 
 const StyledStart = styled.div`
   min-height: 100%;
@@ -64,6 +64,6 @@ const StyledStart = styled.div`
   img {
     width: ${calculateResponsiveSize(150, 300)};
   }
-`;
+`
 
-export default StyledStart;
+export default StyledStart

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Conversation
+from .models import Conversation, Illustration
 
 
 class ConversationSerializer(serializers.ModelSerializer):
@@ -14,4 +14,17 @@ class ConversationSerializer(serializers.ModelSerializer):
             "created",
             "updated",
             "uuid",
+        ]
+
+
+class IllustrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Illustration
+        fields = [
+            "name",
+            "description",
+            "image",
+            "created",
+            "updated",
+            "uuid"
         ]

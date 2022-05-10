@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const StyledCreditPage = styled.div`
   min-height: 100%;
@@ -8,7 +8,7 @@ export const StyledCreditPage = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`;
+`
 
 export const StyledCredits = styled.div`
   max-width: 800px;
@@ -17,7 +17,7 @@ export const StyledCredits = styled.div`
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
-`;
+`
 
 export const StyledCredit = styled.div`
   display: flex;
@@ -36,4 +36,4 @@ export const StyledCredit = styled.div`
   }
 
   margin: 10px;
-`;
+`

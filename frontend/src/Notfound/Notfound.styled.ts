@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const StyledNotfound = styled.div`
   min-height: 100%;
@@ -12,4 +12,4 @@ export const StyledNotfound = styled.div`
   button {
     margin: 20px;
   }
-`;
+`

@@ -1,0 +1,43 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.5.0
+  hooks:
+    - id: check-ast
+      language_version: python3.10
+    - id: check-merge-conflict
+    - id: check-json
+    - id: check-yaml
+
+- repo: https://github.com/ambv/black
+  rev: 21.9b0
+  hooks:
+    - id: black
+      language_version: python3.10
+      files: ^backend/classroomconversation/.*\.py$
+
+- repo: https://github.com/PyCQA/bandit
+  rev: 1.6.2
+  hooks:
+    - id: bandit
+      args: [-l, --recursive, -x, tests]
+      files: ^backend/.*\.py$
+
+- repo: https://github.com/pre-commit/mirrors-prettier
+  rev: v2.2.1
+  hooks:
+    - id: prettier
+      files: ^frontend/.*\.(ts|tsx|js|css|html|json)$
+      args: ['--config=frontend/.prettierrc.js', '--ignore-path=frontend/.prettierignore']
+
+- repo: local
+  hooks:
+    - id: flake8
+      # The provided hook fails to read config file. Therefore this wrapper.
+      name: Python style checking
+      entry: sh -c "backend/.venv/bin/python -m flake8 --config=backend/.flake8 backend/classroomconversation"
+      language: system
+    - id: yarntest
+      name: Yarn tests
+      entry: sh -c "cd frontend && CI=true yarn test -coverage=false"
+      language: system
+      files: ^frontend/.*\.(test.ts|test.tsx|test.js)$

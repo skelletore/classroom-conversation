@@ -1,38 +1,70 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { motion } from 'framer-motion'
 
-import { Graph, Answer, Answers, Questions } from "../types";
-import { getSelectedAvatar, getSelectedStudent } from "../helpers";
+import {
+  Graph,
+  Answer,
+  Answers,
+  Questions,
+  Illustrations,
+  Illustration,
+} from '../types'
+import { getSelectedAvatar, getSelectedStudent } from '../helpers'
 
-import teacherWoman from "./../static/teacher_woman.png";
-import teacherMan from "./../static/teacher_man.png";
-import studentGirl from "./../static/student_girl.png";
-import studentBoy from "./../static/student_boy.png";
+import teacherWoman from './../static/teacher_woman.png'
+import teacherMan from './../static/teacher_man.png'
+import studentGirl from './../static/student_girl.png'
+import studentBoy from './../static/student_boy.png'
 
 import {
   StyledQuestion,
   StyledAlternatives,
   StyledAnswer,
   StyledIcons,
-} from "./Question.styled";
+  StyledIllustration,
+} from './Question.styled'
 
 type Props = {
-  graph: Graph;
-  uuid: string;
-  id: string;
-};
+  graph: Graph
+  uuid: string
+  id: string
+}
 
 const QuestionComponent = ({ graph, uuid, id }: Props) => {
-  const history = useHistory();
-  const questions: Questions = graph.questions;
-  const answers: Answers = graph.answers;
-  const question = questions[id];
-  const randomAnswer: Answer = answers[question.selectedAnswer];
-  const alternatives: Array<string> = randomAnswer.alternatives;
+  const history = useHistory()
+  const questions: Questions = graph.questions
+  const illustrations: Illustrations = graph.illustrations || {}
+  const answers: Answers = graph.answers
+  const question = questions[id]
+  const [illustration, setIllustration] = useState<Illustration>()
+  const randomAnswer: Answer = answers[question.selectedAnswer]
+  const alternatives: Array<string> = randomAnswer.alternatives
 
-  const student = getSelectedStudent(uuid);
-  const avatar = getSelectedAvatar();
+  const student = getSelectedStudent(uuid)
+  const avatar = getSelectedAvatar()
+
+  useEffect(() => {
+    let illustrationId
+    if (Object.keys(illustrations).includes(id)) {
+      illustrationId = id
+    } else if (Object.keys(illustrations).includes(randomAnswer.id)) {
+      illustrationId = randomAnswer.id
+    } else {
+      setIllustration(undefined)
+    }
+    if (illustrationId) {
+      let _illustrations: Array<Illustration> = illustrations[illustrationId]
+      if (_illustrations.length === 1) {
+        setIllustration(_illustrations[0])
+      } else {
+        console.warn(
+          'Found multiple illustrations, but support has not yet been implemented. Using first item.'
+        )
+        setIllustration(_illustrations[0])
+      }
+    }
+  }, [questions, illustrations, answers, question, randomAnswer])
 
   return (
     <StyledQuestion>
@@ -41,7 +73,7 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          key={"teacher" + id}
+          key={'teacher' + id}
           className="teacher"
         >
           {question.label}
@@ -52,12 +84,20 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ delay: 1 }}
-          key={"student_" + id}
+          key={'student_' + id}
           className="student"
         >
-          {answers[randomAnswer.id].label || ""}
+          {answers[randomAnswer.id].label || ''}
         </motion.h2>
       </StyledAnswer>
+
+      {illustration && (
+        <StyledIllustration
+          className="styledIllustration"
+          src={illustration.img}
+          alt={illustration.label || 'Illustration'}
+        />
+      )}
 
       <StyledAlternatives>
         <StyledIcons>
@@ -85,12 +125,12 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ delay: 2 + 0.5 * key }}
-                  key={"alternative_" + key}
+                  key={'alternative_' + key}
                   onClick={() =>
-                    history.push("/conversation/" + uuid + "/question/" + id)
+                    history.push('/conversation/' + uuid + '/question/' + id)
                   }
                 >
-                  <p>{questions[id].label}</p>
+                  <p>{questions[id]?.label || 'Missing node label'}</p>
                 </motion.button>
               ))}
             </>
@@ -98,7 +138,7 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
         </div>
       </StyledAlternatives>
     </StyledQuestion>
-  );
-};
+  )
+}
 
-export default QuestionComponent;
+export default QuestionComponent

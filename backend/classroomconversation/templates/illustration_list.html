@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+<table class="uploads table">
+  <tr>
+    <th>{% trans "table.label.date" %}</th>
+    <th>{% trans "table.label.name" %}</th>
+    <th>{% trans "table.label.filename" %}</th>
+    <th>{% trans "table.label.description" %}</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+  {% for illustration in illustrations %}
+  <tr>
+    <td>{{ illustration.created|date:"d.m.Y" }} {{ illustration.created|time:"H:i" }}</td>
+    <td>{{ illustration.name}}</td>
+    <td>{{ illustration.image.name}}</td>
+    <td>{{ illustration.description}}</td>
+    <td><a href="{{ illustration.image.url }}">{% trans "table.action.download" %}</a></td>
+    <td>
+      <button id="copy-link" onclick="copyLinkToClipboard('{{ illustration.image.url }}', false);">{% trans "table.action.copy" %}</button>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

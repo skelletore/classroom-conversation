@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
-import { calculateResponsiveSize } from "./../helpers";
+import { calculateResponsiveSize } from './../helpers'
 
 export const StyledQuestion = styled.div`
   min-height: 100%;
@@ -9,7 +9,7 @@ export const StyledQuestion = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
+`
 
 export const StyledAnswer = styled.div`
   width: 100%;
@@ -19,7 +19,7 @@ export const StyledAnswer = styled.div`
 
   h2 {
     width: 50%;
-    font-family: "Gloria Hallelujah", cursive;
+    font-family: 'Gloria Hallelujah', cursive;
   }
 
   .teacher {
@@ -33,7 +33,17 @@ export const StyledAnswer = styled.div`
     padding-right: 10%;
     text-align: right;
   }
-`;
+`
+
+export const StyledIllustration = styled.img`
+  align-items: center;
+  text-align: center;
+  max-width: 25%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+`
 
 export const StyledAlternatives = styled.div`
   width: 100%;
@@ -64,7 +74,7 @@ export const StyledAlternatives = styled.div`
   button {
     margin: 0 10px;
   }
-`;
+`
 
 export const StyledIcons = styled.div`
   width: 100%;
@@ -78,4 +88,4 @@ export const StyledIcons = styled.div`
   .student {
     width: ${calculateResponsiveSize(110, 320)};
   }
-`;
+`

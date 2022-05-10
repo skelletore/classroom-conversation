@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 const StyledLoading = styled.div`
   width: 100%;
@@ -13,6 +13,6 @@ const StyledLoading = styled.div`
     width: 100%;
     height: 100%;
   }
-`;
+`
 
-export default StyledLoading;
+export default StyledLoading

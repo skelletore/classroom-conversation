@@ -45,7 +45,7 @@ def diamonds_connected_to_squares(file):
 
         for source in sources:
             source_node = get_node_by_id(source, graph)
-            if not is_node_shape("roundrectangle", source_node, root):
+            if not is_node_shape("roundrectangle", source_node, root) and not is_node_shape("hexagon", source_node, root):
                 return False
 
     return True
@@ -101,6 +101,7 @@ def has_illegal_node_shapes(file):
         "diamond",
         "roundrectangle",
         "octagon",
+        "hexagon",
     ]
 
     invalid_shapes = [
@@ -167,15 +168,71 @@ def one_type_of_child_nodes(file):
     nodes = get_all_nodes(graph)
 
     for node in nodes:
-        lines = [
+        lines = set([
             get_node_shape(get_node_by_id(edge.get("target"), graph), root)
             for edge in edges
             if edge.get("source") == node.get("id")
-        ]
+        ])
 
-        if len(set(lines)) > 1:
+        # fix for illustrations
+        if 'hexagon' in lines:
+            lines.remove('hexagon')
+
+        if len(lines) > 1:
             return False
     return True
+
+
+def get_children(node, edges):
+    return [edge for edge in edges if edge.get("source") == node.get("id")]
+
+
+def get_target_shapes(children, graph, root, exclude_illustrations=False, exclude_finish=False):
+    targets = set([(get_node_shape(get_node_by_id(child.get("target"), graph), root)) for child in children])
+    if exclude_illustrations and "hexagon" in targets:
+        targets.remove("hexagon")
+    if exclude_finish and "octagon" in targets:
+        targets.remove("octagon")
+    return list(targets)
+
+
+def questions_have_questions(file):
+    (tree, root, graph, graphml) = get_tree_root_graph(file)
+
+    edges = get_all_edges(graph)
+    nodes = get_all_rectangles(graph, root)
+
+    for node in nodes:
+        children = get_children(node, edges)
+
+        targets = get_target_shapes(children, graph, root, exclude_illustrations=True)
+        if not targets or "roundrectangle" in targets:
+            return True
+
+    return False
+        
+
+def questions_have_answers(file):
+    """ Ensure that each question (roundrectangle) has at least one answer
+    """
+    (tree, root, graph, graphml) = get_tree_root_graph(file)
+
+    edges = get_all_edges(graph)
+    nodes = get_all_rectangles(graph, root)
+
+    for node in nodes:
+        children = get_children(node, edges)
+
+        targets = get_target_shapes(children, graph, root, exclude_illustrations=True)
+        if "diamond" not in targets:
+            if len(targets) == 1 and targets[0] == "octagon":
+                # finish
+                pass
+            else:
+                return False
+
+    return True
+
 
 def only_single_chained_questions(file):
     (tree, root, graph, graphml) = get_tree_root_graph(file)

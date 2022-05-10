@@ -41,9 +41,9 @@
         $("#language-button").click();
       }
 
-      function copyLinkToClipboard(str) {
+      function copyLinkToClipboard(str, full_path=true) {
         var element = document.createElement('textarea');
-        element.value = location.origin + str;
+        element.value = full_path ? location.origin + str : str;
         document.body.appendChild(element);
         element.select();
         document.execCommand('copy');
@@ -66,6 +66,16 @@
           class="nav-item nav-link {% if request.get_full_path == '/upload' %}active{% endif %}"
           href="/upload"
           >{% trans "navigation.upload" %}</a
+        >
+        <a
+          class="nav-item nav-link {% if request.get_full_path == '/illustration/list' %}active{% endif %}"
+          href="/illustration/list"
+          >{% trans "navigation.illustration" %}</a
+        >
+        <a
+          class="nav-item nav-link {% if request.get_full_path == '/upload/illustration' %}active{% endif %}"
+          href="/upload/illustration"
+          >{% trans "navigation.upload_illustration" %}</a
         >
       </div>
 

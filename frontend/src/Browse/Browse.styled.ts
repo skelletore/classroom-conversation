@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 export const StyledBrowse = styled.div`
   width: 100%;
@@ -18,7 +18,7 @@ export const StyledBrowse = styled.div`
   h2 {
     cursor: pointer;
   }
-`;
+`
 
 export const StyledLinks = styled.div`
   display: flex;
@@ -30,4 +30,4 @@ export const StyledLinks = styled.div`
   div {
     padding: 15px 0;
   }
-`;
+`

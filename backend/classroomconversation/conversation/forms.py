@@ -2,8 +2,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.core.files import File
 
-from .models import Conversation
-from django.core.exceptions import ValidationError
+from .models import Conversation, Illustration
 
 from .validation import (
     has_one_star_node,
@@ -17,7 +16,24 @@ from .validation import (
     one_type_of_child_nodes,
     only_single_chained_questions,
     all_nodes_contains_labels,
+    questions_have_questions,
+    questions_have_answers,
 )
+
+
+class IllustrationForm(forms.ModelForm):
+    class Meta:
+        model = Illustration
+        fields = (
+            "name",
+            "description",
+            "image",
+        )
+        labels = {
+            "name": _("form.label.name"),
+            "description": _("form.label.description"),
+            "image": _("form.label.image"),
+        }
 
 
 class ConversationForm(forms.ModelForm):
@@ -62,8 +78,11 @@ class ConversationForm(forms.ModelForm):
         if not one_type_of_child_nodes(file):
             raise forms.ValidationError(_("validation.doc.child.nodes.type"))
 
-        if not only_single_chained_questions(file):
-            raise forms.ValidationError(_("validation.doc.single.chained.questions"))
+        if questions_have_questions(file):
+            raise forms.ValidationError(_("validation.doc.question.has.question"))
+
+        if not questions_have_answers(file):
+            raise forms.ValidationError(_("validation.doc.question.needs.answer"))
 
         if not all_nodes_contains_labels(file):
             raise forms.ValidationError(_("validation.doc.missing.node.label"))
