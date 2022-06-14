@@ -10,12 +10,10 @@ import {
   Illustrations,
   Illustration,
 } from '../types'
-import { getSelectedAvatar, getSelectedStudent } from '../helpers'
+import { getRandomStudent, getSelectedAvatar } from '../helpers'
 
 import teacherWoman from './../static/teacher_woman.png'
 import teacherMan from './../static/teacher_man.png'
-import studentGirl from './../static/student_girl.png'
-import studentBoy from './../static/student_boy.png'
 
 import {
   StyledQuestion,
@@ -34,17 +32,16 @@ type Props = {
 const QuestionComponent = ({ graph, uuid, id }: Props) => {
   const history = useHistory()
   const questions: Questions = graph.questions
-  const illustrations: Illustrations = graph.illustrations || {}
   const answers: Answers = graph.answers
   const question = questions[id]
   const [illustration, setIllustration] = useState<Illustration>()
   const randomAnswer: Answer = answers[question.selectedAnswer]
   const alternatives: Array<string> = randomAnswer.alternatives
 
-  const student = getSelectedStudent(uuid)
   const avatar = getSelectedAvatar()
 
   useEffect(() => {
+    const illustrations: Illustrations = graph.illustrations || {}
     let illustrationId
     if (Object.keys(illustrations).includes(id)) {
       illustrationId = id
@@ -64,7 +61,7 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
         setIllustration(_illustrations[0])
       }
     }
-  }, [questions, illustrations, answers, question, randomAnswer])
+  }, [questions, answers, question, randomAnswer, id, graph.illustrations])
 
   return (
     <StyledQuestion>
@@ -107,12 +104,10 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
           {avatar === 2 && (
             <img className="teacher" src={teacherMan} alt="Male avatar" />
           )}
-          {student === 1 && (
-            <img className="student" alt="student avatar" src={studentGirl} />
-          )}
-          {student === 2 && (
-            <img className="student" alt="student avatar" src={studentBoy} />
-          )}
+          <div className="students">
+            <img className="student" alt="student avatar" src={getRandomStudent()} />
+            <img className="student" alt="student avatar" src={getRandomStudent()} />
+          </div>
         </StyledIcons>
 
         <div className="alternatives">

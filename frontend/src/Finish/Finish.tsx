@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 
 import { StyledFinish } from './Finish.styled'
@@ -7,9 +7,9 @@ import {
   removeConversation,
   getRecordedConversation,
   getSelectedAvatar,
-  getSelectedStudent,
   prepareConversationForSubmission,
   submitConversation,
+  getRandomStudent,
 } from './../helpers'
 import { UrlParams, Questions, Question, Answers, Answer } from './../types'
 
@@ -17,8 +17,6 @@ import clock from './../static/clock.png'
 
 import teacherFemale from './../static/teacher_woman.png'
 import teacherMale from './../static/teacher_man.png'
-import studentGirl from './../static/student_girl.png'
-import studentBoy from './../static/student_boy.png'
 
 import {
   PDFDownloadLink,
@@ -181,8 +179,7 @@ const Finish = ({ name, intro, questions, answers }: FinishProps) => {
 
   const teacherImg: string =
     getSelectedAvatar() === 1 ? teacherFemale : teacherMale
-  const studentImg: string =
-    getSelectedStudent(uuid) === 1 ? studentGirl : studentBoy
+  const studentImg: string = getRandomStudent()
   const finishedAt = new Date().toISOString()
   const pdfFileName = `conversation-${finishedAt}.pdf`
 

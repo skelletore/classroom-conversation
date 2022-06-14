@@ -85,7 +85,10 @@ export const StyledIcons = styled.div`
   .teacher {
     width: ${calculateResponsiveSize(150, 400)};
   }
+  .students {
+    justify-content: flex-end;
+  }
   .student {
-    width: ${calculateResponsiveSize(110, 320)};
+    width: ${calculateResponsiveSize(69, 200)};
   }
 `
