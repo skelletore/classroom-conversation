@@ -1,3 +1,4 @@
+from typing import List
 import uuid
 
 from rest_framework.permissions import AllowAny, IsAdminUser
@@ -13,6 +14,8 @@ from .forms import ConversationForm, IllustrationForm
 from .models import Conversation, Illustration, CompletedConversation
 from .serializers import ConversationSerializer, IllustrationSerializer, CompletedConversationSerializer
 from .parser import graphml_to_json
+
+LOGIN_URL = "/account/login/"
 
 
 ### API ###
@@ -45,7 +48,7 @@ class CompletedConversationCreateAPIView(mixins.CreateModelMixin, viewsets.Gener
 
 
 ### VIEWS ###
-@login_required(login_url="/account/login/")
+@login_required(login_url=LOGIN_URL)
 @permission_required("user.is_staff", raise_exception=True)
 def upload_document(request):
     if request.method == "POST":
@@ -67,14 +70,14 @@ def upload_document(request):
     return render(request, "upload_document.html", {"form": form})
 
 
-@login_required(login_url="/account/login/")
+@login_required(login_url=LOGIN_URL)
 @permission_required("user.is_staff", raise_exception=True)
 def document_list(request):
     conversations = Conversation.objects.all().order_by("-created")
     return render(request, "document_list.html", {"conversations": conversations})
 
 
-@login_required(login_url="/account/login/")
+@login_required(login_url=LOGIN_URL)
 @permission_required("user.is_staff", raise_exception=True)
 def upload_illustration(request):
     if request.method == "POST":
@@ -95,7 +98,7 @@ def upload_illustration(request):
     return render(request, "upload_illustration.html", {"form": form})
 
 
-@login_required(login_url="/account/login/")
+@login_required(login_url=LOGIN_URL)
 @permission_required("user.is_staff", raise_exception=True)
 def illustration_list(request):
     illustrations = Illustration.objects.all().order_by("-created")
