@@ -14,7 +14,6 @@ from .validation import (
     missing_edge_probability,
     wrong_probability_distribution,
     one_type_of_child_nodes,
-    only_single_chained_questions,
     all_nodes_contains_labels,
     questions_have_questions,
     questions_have_answers,
@@ -57,35 +56,53 @@ class ConversationForm(forms.ModelForm):
         uniform = self.data.get("uniform_probability")
         file = File(document)
 
-        if not all_nodes_connected(file):
-            raise forms.ValidationError(_("validation.doc.all.nodes.connected"))
+        is_valid, errors = all_nodes_connected(file)
+        if not is_valid:
+            error_type = _("validation.doc.all.nodes.connected")
+            raise forms.ValidationError([error_type] + errors)
 
-        if broken_conversation(file):
-            raise forms.ValidationError(_("validation.doc.broken.conversation"))
+        is_invalid, errors = broken_conversation(file)
+        if is_invalid:
+            error_type = _("validation.doc.broken.conversation")
+            raise forms.ValidationError([error_type] + errors)
 
-        if not has_one_star_node(file):
-            raise forms.ValidationError(_("validation.doc.one.star"))
+        is_valid, errors = has_one_star_node(file)
+        if not is_valid:
+            error_type = _("validation.doc.one.star")
+            raise forms.ValidationError([error_type] + errors)
 
         if not has_octant_node(file):
             raise forms.ValidationError(_("validation.doc.end.node"))
 
-        if has_illegal_node_shapes(file):
-            raise forms.ValidationError(_("validation.doc.illegal.shapes"))
+        is_valid, errors = has_illegal_node_shapes(file)
+        if not is_valid:
+            error_type = _("validation.doc.illegal.shapes")
+            raise forms.ValidationError([error_type] + errors)
 
-        if not diamonds_connected_to_squares(file):
-            raise forms.ValidationError(_("validation.doc.diamonds.connections"))
+        is_valid, errors = diamonds_connected_to_squares(file)
+        if not is_valid:
+            error_type = _("validation.doc.diamonds.connections")
+            raise forms.ValidationError([error_type] + errors)
 
-        if not one_type_of_child_nodes(file):
-            raise forms.ValidationError(_("validation.doc.child.nodes.type"))
+        is_valid, errors = one_type_of_child_nodes(file)
+        if not is_valid:
+            error_type = _("validation.doc.child.nodes.type")
+            raise forms.ValidationError([error_type] + errors)
 
-        if questions_have_questions(file):
-            raise forms.ValidationError(_("validation.doc.question.has.question"))
+        is_invalid, errors = questions_have_questions(file)
+        if is_invalid:
+            error_type = _("validation.doc.question.has.question")
+            raise forms.ValidationError([error_type] + errors)
 
-        if not questions_have_answers(file):
-            raise forms.ValidationError(_("validation.doc.question.needs.answer"))
+        is_valid, errors = questions_have_answers(file)
+        if not is_valid:
+            error_type = _("validation.doc.question.needs.answer")
+            raise forms.ValidationError([error_type] + errors)
 
-        if not all_nodes_contains_labels(file):
-            raise forms.ValidationError(_("validation.doc.missing.node.label"))
+        is_valid, errors = all_nodes_contains_labels(file)
+        if not is_valid:
+            error_type = _("validation.doc.missing.node.label")
+            raise forms.ValidationError([error_type] + errors)
 
         if not uniform:
             if missing_edge_probability(file):

@@ -1,38 +1,58 @@
+from django.utils.translation import gettext_lazy as _
+from typing import List, Tuple
 
+from .const import DIAMOND, HEXAGON, OCTAGON, RECTANGLE, VALID_SHAPES
 from .helpers import (
-    get_graphml,
     get_tree_root_graph,
     get_all_nodes,
     get_all_edges,
-    is_node_shape,
+    is_diamond,
+    is_hexagon,
     get_node_shape,
     get_node_by_id,
     get_edge_label,
     get_all_rectangles,
+    is_octagon,
     is_rectangle,
+    is_star,
     get_node_label
 )
 
 
-def has_one_star_node(file):
+def has_one_star_node(file) -> Tuple[bool, List[str]]:
+    errors = []
     (tree, root, graph, graphml) = get_tree_root_graph(file)
     nodes = get_all_nodes(graph)
 
-    return len([node for node in nodes if is_node_shape("star", node, root)]) == 1
+    star_nodes = [node for node in nodes if is_star(node, root)]
+    if len(star_nodes) < 1:
+        errors.append(_("validation.doc.no.star"))
+    elif len(star_nodes) > 1:
+        errors.append(_("validation.doc.multi.star"))
+        for star_node in star_nodes:
+            id = star_node.get("id")
+            label = get_node_label(star_node, root)
+            shape = get_node_shape(star_node, root)
+            errors.append(f"- Node {id}: '{label}' ({shape})")
+
+    if len(errors) > 0:
+        return False, errors
+
+    return True, errors
 
 
-def has_octant_node(file):
+def has_octant_node(file) -> bool:
     (tree, root, graph, graphml) = get_tree_root_graph(file)
     nodes = get_all_nodes(graph)
 
-    return len([node for node in nodes if is_node_shape("octagon", node, root)]) > 0
+    return len([node for node in nodes if is_octagon(node, root)]) > 0
 
 
-def diamonds_connected_to_squares(file):
+def diamonds_connected_to_squares(file) -> Tuple[bool, List[str]]:
+    # TODO: Rework to support many-to-many
+    errors = []
     (tree, root, graph, graphml) = get_tree_root_graph(file)
-    nodes = [
-        node for node in get_all_nodes(graph) if get_node_shape(node, root) == "diamond"
-    ]
+    nodes = [node for node in get_all_nodes(graph) if is_diamond(node, root)]
 
     for node in nodes:
         id = node.get("id")
@@ -45,18 +65,28 @@ def diamonds_connected_to_squares(file):
 
         for source in sources:
             source_node = get_node_by_id(source, graph)
-            if not is_node_shape("roundrectangle", source_node, root) and not is_node_shape("hexagon", source_node, root):
-                return False
+            if not is_rectangle(source_node, root) and not is_hexagon(source_node, root):
+                source_id = source_node.get("id")
+                source_label = get_node_label(source_node, root)
+                source_shape = get_node_shape(source_node, root)
+                label = get_node_label(node, root)
+                shape = get_node_shape(node, root)
+                msg = _("validation.doc.node.connected.to")
+                errors.append(f"- Node {id}: '{label}' ({shape}) {msg} node {source_id}: '{source_label}' ({source_shape})")
+                
+    if len(errors) > 0:
+        return False, errors
 
-    return True
+    return True, errors
 
 
-def broken_conversation(file):
+def broken_conversation(file) -> Tuple[bool, List[str]]:
+    errors = []
     (tree, root, graph, graphml) = get_tree_root_graph(file)
     nodes = [
         node
         for node in get_all_nodes(graph)
-        if get_node_shape(node, root) in ["diamond", "roundrectangle"]
+        if get_node_shape(node, root) in [DIAMOND, RECTANGLE]
     ]
 
     for node in nodes:
@@ -70,47 +100,51 @@ def broken_conversation(file):
         ]
 
         if len(sources) == 0:
-            return True
+            label = get_node_label(node, root)
+            shape = get_node_shape(node, root)
+            errors.append(f"- Node {id}: '{label}' ({shape})")
 
-    return False
+    if len(errors) > 0:
+        return True, errors
+
+    return False, errors
 
 
-def all_nodes_connected(file):
+def all_nodes_connected(file) -> Tuple[bool, List[str]]:
+    errors = []
     (tree, root, graph, graphml) = get_tree_root_graph(file)
     nodes = get_all_nodes(graph)
-    edges = get_all_edges(graph)
 
     for node in nodes:
         id = node.get("id")
         source = graph.findall(graphml.get("edge") + "[@source='" + str(id) + "']")
         target = graph.findall(graphml.get("edge") + "[@target='" + str(id) + "']")
         if len(source) == 0 and len(target) == 0:
-            return False
-    return True
+            label = get_node_label(node, root)
+            shape = get_node_shape(node, root)
+            errors.append(f"- Node {id}: '{label}' ({shape})")
+    if len(errors) > 0:
+        return False, errors
+    return True, errors
 
 
-def has_illegal_node_shapes(file):
+def has_illegal_node_shapes(file) -> Tuple[bool, List[str]]:
+    errors = []
     (tree, root, graph, graphml) = get_tree_root_graph(file)
     nodes = get_all_nodes(graph)
 
-    valid_shapes = [
-        "star",
-        "star5",
-        "star6",
-        "star8",
-        "diamond",
-        "roundrectangle",
-        "octagon",
-        "hexagon",
-    ]
+    for node in nodes:
+        id = node.get('id')
+        shape = get_node_shape(node, root)
+        if shape not in VALID_SHAPES:
+            label = get_node_label(node, root)
+            shape = get_node_shape(node, root)
+            errors.append(f"- Node {id}: '{label}' ({shape})")
 
-    invalid_shapes = [
-        node
-        for node in nodes
-        if not any(get_node_shape(node, root) in shape for shape in valid_shapes)
-    ]
+    if len(errors) > 0:
+        return False, errors
 
-    return len(invalid_shapes) > 0
+    return True, errors
 
 
 def wrong_probability_distribution(file):
@@ -118,7 +152,7 @@ def wrong_probability_distribution(file):
     edges = graph.findall(graphml.get("edge"))
 
     nodes = [
-        node for node in get_all_nodes(graph) if is_node_shape("roundrectangle", node, root)
+        node for node in get_all_nodes(graph) if is_rectangle(node, root)
     ]
 
     for node in nodes:
@@ -126,7 +160,7 @@ def wrong_probability_distribution(file):
             edge
             for edge in edges
             if edge.get("source") == node.get("id")
-            and is_node_shape("diamond", get_node_by_id(edge.get("target"), graph), root)
+            and is_diamond(get_node_by_id(edge.get("target"), graph), root)
         ]
 
         sum = 0
@@ -148,7 +182,7 @@ def missing_edge_probability(file):
     (tree, root, graph, graphml) = get_tree_root_graph(file)
 
     edges = graph.findall(graphml.get("edge"))
-    nodes = [node for node in get_all_nodes(graph) if is_node_shape("diamond", node, root)]
+    nodes = [node for node in get_all_nodes(graph) if is_diamond(node, root)]
 
     for node in nodes:
         lines = [edge for edge in edges if edge.get("target") == node.get("id")]
@@ -161,13 +195,17 @@ def missing_edge_probability(file):
                 return True
     return False
 
-def one_type_of_child_nodes(file):
+
+def one_type_of_child_nodes(file) -> Tuple[bool, List[str]]:
+    # TODO: Rework to support many-to-many
+    errors = []
     (tree, root, graph, graphml) = get_tree_root_graph(file)
 
     edges = graph.findall(graphml.get("edge"))
     nodes = get_all_nodes(graph)
 
     for node in nodes:
+        id = node.get("id")
         lines = set([
             get_node_shape(get_node_by_id(edge.get("target"), graph), root)
             for edge in edges
@@ -175,12 +213,18 @@ def one_type_of_child_nodes(file):
         ])
 
         # fix for illustrations
-        if 'hexagon' in lines:
-            lines.remove('hexagon')
+        if HEXAGON in lines:
+            lines.remove(HEXAGON)
 
         if len(lines) > 1:
-            return False
-    return True
+            label = get_node_label(node, root)
+            shape = get_node_shape(node, root)
+            errors.append(f"- Node {id}: '{label}' ({shape})")
+
+    if len(errors) > 0:
+        return False, errors
+
+    return True, errors
 
 
 def get_children(node, edges):
@@ -189,14 +233,16 @@ def get_children(node, edges):
 
 def get_target_shapes(children, graph, root, exclude_illustrations=False, exclude_finish=False):
     targets = set([(get_node_shape(get_node_by_id(child.get("target"), graph), root)) for child in children])
-    if exclude_illustrations and "hexagon" in targets:
-        targets.remove("hexagon")
-    if exclude_finish and "octagon" in targets:
-        targets.remove("octagon")
+    if exclude_illustrations and HEXAGON in targets:
+        targets.remove(HEXAGON)
+    if exclude_finish and OCTAGON in targets:
+        targets.remove(OCTAGON)
     return list(targets)
 
 
-def questions_have_questions(file):
+def questions_have_questions(file) -> Tuple[bool, List[str]]:
+    # TODO: Rework to support many-to-many
+    errors = []
     (tree, root, graph, graphml) = get_tree_root_graph(file)
 
     edges = get_all_edges(graph)
@@ -206,13 +252,21 @@ def questions_have_questions(file):
         children = get_children(node, edges)
 
         targets = get_target_shapes(children, graph, root, exclude_illustrations=True)
-        if not targets or "roundrectangle" in targets:
-            return True
+        if not targets or RECTANGLE in targets:
+            id = node.get("id")
+            label = get_node_label(node, root)
+            shape = get_node_shape(node, root)
+            errors.append(f"- Node {id}: '{label}' ({shape})")
 
-    return False
+    if len(errors) > 0:
+        return True, errors
+
+    return False, errors
         
 
-def questions_have_answers(file):
+def questions_have_answers(file) -> Tuple[bool, List[str]]:
+    # TODO: Rework to support many-to-many?
+    errors = []
     """ Ensure that each question (roundrectangle) has at least one answer
     """
     (tree, root, graph, graphml) = get_tree_root_graph(file)
@@ -224,14 +278,20 @@ def questions_have_answers(file):
         children = get_children(node, edges)
 
         targets = get_target_shapes(children, graph, root, exclude_illustrations=True)
-        if "diamond" not in targets:
-            if len(targets) == 1 and targets[0] == "octagon":
-                # finish
+        if DIAMOND not in targets:
+            if len(targets) == 1 and targets[0] == OCTAGON:
+                # finish (end node)
                 pass
             else:
-                return False
+                id = node.get("id")
+                label = get_node_label(node, root)
+                shape = get_node_shape(node, root)
+                errors.append(f"- Node {id}: '{label}' ({shape})")
 
-    return True
+    if len(errors) > 0:
+        return False, errors
+
+    return True, errors
 
 
 def only_single_chained_questions(file):
@@ -245,18 +305,25 @@ def only_single_chained_questions(file):
         
         if len(children) > 1:
             targets = set([(get_node_shape(get_node_by_id(child.get("target"), graph), root)) for child in children])
-            if len(targets) > 1 or not "diamond" in targets:
+            if len(targets) > 1 or not DIAMOND in targets:
                 return False
 
     return True
 
-def all_nodes_contains_labels(file):
+
+def all_nodes_contains_labels(file) -> Tuple[bool, List[str]]:
+    errors = []
     (tree, root, graph, graphml) = get_tree_root_graph(file)
     
-    nodes = get_all_rectangles(graph, root)
+    nodes = get_all_nodes(graph)
 
     for node in nodes:
         if not get_node_label(node, root):
-            return False
+            id = node.get("id")
+            shape = get_node_shape(node, root)
+            errors.append(f"- Node {id} ({shape})")
 
-    return True
+    if len(errors) > 0:
+        return False, errors
+
+    return True, errors
