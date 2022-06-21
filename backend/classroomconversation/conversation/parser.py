@@ -1,4 +1,4 @@
-import xml.etree.ElementTree as ElementTree
+from .const import DIAMOND, OCTAGON, RECTANGLE, STAR
 
 from .helpers import (
     get_node_label,
@@ -45,7 +45,7 @@ def graphml_to_json(file, uniform):
         if illustrations:
             out["illustrations"][id] = illustrations
 
-        if shape == "roundrectangle":
+        if shape == RECTANGLE:
             answers = find_answers(edges, uniform, root, graph)
             out["questions"][id] = {
                 "id": id,
@@ -53,21 +53,21 @@ def graphml_to_json(file, uniform):
                 "label": label,
                 "answers": answers,
             }
-        elif shape == "diamond":            
+        elif shape == DIAMOND:            
             out["answers"][id] = {
                 "id": id,
                 "shape": shape,
                 "label": label,
                 "alternatives": find_alternatives(edges, root, graph)
             }
-        elif "star" in shape:
+        elif STAR in shape:
             out["start"] = {
                 "id": id,
                 "label": label,
                 "type": shape,
                 "firstQuestion": edges[0].get("target"),
             }
-        elif shape == "octagon":
+        elif shape == OCTAGON:
             out["end"] = id
 
     return out, errors

@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as ElementTree
+from .const import DIAMOND, HEXAGON, OCTAGON, RECTANGLE, STAR
 
 
 def get_graphml():
@@ -129,27 +130,27 @@ def is_node_shape(shape, node, root):
 
 def is_diamond(node, root):
     node_shape = get_node_shape(node, root)
-    return "diamond" in node_shape if node_shape else False
+    return DIAMOND in node_shape if node_shape else False
 
 
 def is_star(node, root):
     node_shape = get_node_shape(node, root)
-    return "star" in node_shape if node_shape else False
+    return STAR in node_shape if node_shape else False
 
 
 def is_rectangle(node, root):
     node_shape = get_node_shape(node, root)
-    return "roundrectangle" in node_shape if node_shape else False
+    return RECTANGLE in node_shape if node_shape else False
 
 
 def is_octagon(node, root):
     node_shape = get_node_shape(node, root)
-    return "octagon" in node_shape if node_shape else False
+    return OCTAGON in node_shape if node_shape else False
 
 
 def is_hexagon(node, root):
     node_shape = get_node_shape(node, root)
-    return "hexagon" in node_shape if node_shape else False
+    return HEXAGON in node_shape if node_shape else False
 
 
 def get_all_rectangles(graph, root):
@@ -207,6 +208,7 @@ def is_valid_img_src(src: str) -> bool:
 
 
 def find_illustrations(edges, root, graph):
+    # TODO: Move validation to validation.py
     errors = []
     illustrations = []
     for edge in edges:
