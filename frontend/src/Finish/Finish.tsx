@@ -7,7 +7,9 @@ import {
   removeConversation,
   getRecordedConversation,
   getSelectedAvatar,
-  getSelectedStudent,
+  prepareConversationForSubmission,
+  submitConversation,
+  getRandomStudent,
 } from './../helpers'
 import { UrlParams, Questions, Question, Answers, Answer } from './../types'
 
@@ -15,8 +17,6 @@ import clock from './../static/clock.png'
 
 import teacherFemale from './../static/teacher_woman.png'
 import teacherMale from './../static/teacher_man.png'
-import studentGirl from './../static/student_girl.png'
-import studentBoy from './../static/student_boy.png'
 
 import {
   PDFDownloadLink,
@@ -28,6 +28,7 @@ import {
   Font,
   Image,
 } from '@react-pdf/renderer'
+import { useLocalStorage } from '../hooks'
 
 Font.register({
   family: 'opensans',
@@ -173,13 +174,21 @@ const PDFDocument = ({
 const Finish = ({ name, intro, questions, answers }: FinishProps) => {
   const history = useHistory()
   const { uuid } = useParams<UrlParams>()
+  const [hasSubmitted, setHasSubmitted] =
+    useLocalStorage<boolean>('hasSubmitted')
 
   const teacherImg: string =
     getSelectedAvatar() === 1 ? teacherFemale : teacherMale
-  const studentImg: string =
-    getSelectedStudent(uuid) === 1 ? studentGirl : studentBoy
+  const studentImg: string = getRandomStudent()
   const finishedAt = new Date().toISOString()
   const pdfFileName = `conversation-${finishedAt}.pdf`
+
+  const dialogue = getRecordedConversation(uuid)
+  const choices = prepareConversationForSubmission(dialogue, questions, answers)
+  if (!hasSubmitted) {
+    submitConversation(uuid, choices)
+    setHasSubmitted(true)
+  }
 
   return (
     <StyledFinish>
@@ -201,7 +210,7 @@ const Finish = ({ name, intro, questions, answers }: FinishProps) => {
               name={name}
               intro={intro}
               questions={questions}
-              dialog={getRecordedConversation(uuid)}
+              dialog={dialogue}
               answers={answers}
               student={studentImg}
               teacher={teacherImg}

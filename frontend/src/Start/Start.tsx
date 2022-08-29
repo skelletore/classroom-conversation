@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 
-import { useFetchAndStoreConversation } from '../hooks'
+import { useFetchAndStoreConversation, useLocalStorage } from '../hooks'
 import {
   removeRecordedConversation,
   hasDialogRecorded,
@@ -27,6 +27,8 @@ const Start = () => {
   const history = useHistory()
   const { uuid } = useParams<UrlParams>()
   const [selectedAvatar, setAvatar] = useState<number>(getSelectedAvatar())
+  const [hasSubmitted, setHasSubmitted] =
+    useLocalStorage<boolean>('hasSubmitted')
 
   const [data, loading] = useFetchAndStoreConversation<Conversation>(
     `/api/document/${uuid}`,
@@ -69,6 +71,7 @@ const Start = () => {
           <button
             onClick={() => {
               removeRecordedConversation()
+              setHasSubmitted(false)
               history.push(
                 '/conversation/' + uuid + '/question/' + startNode.firstQuestion
               )

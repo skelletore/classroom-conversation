@@ -1,4 +1,3 @@
-from pydoc import describe
 from django.db import models
 from django.db.models import JSONField
 
@@ -32,3 +31,15 @@ class Illustration(models.Model):
 
     def __str__(self) -> str:
         return str(self.name)
+
+
+class CompletedConversation(models.Model):
+    id = models.AutoField(primary_key=True)
+    uuid = models.CharField(max_length=36, blank=False, unique=True)
+    conversation = models.ForeignKey(to=Conversation, to_field="uuid", on_delete=models.SET_NULL, null=True)
+    choices = models.JSONField(blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return str(self.id)
