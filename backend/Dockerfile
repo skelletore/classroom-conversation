@@ -2,6 +2,8 @@ ARG APP_ROOT=/app
 ARG POETRY_INSTALL_ARGS="--no-interaction --no-ansi"
 ARG VENV_PATH=$APP_ROOT/.venv
 ARG APT_INSTALL_ARGS="-qq --no-install-recommends -o Dpkg::Use-Pty=0"
+ARG RUN_AS_USER_NAME="abc"
+ARG RUN_AS_USER_UID="1000"
 
 FROM python:3.10-slim AS base
 ARG APP_ROOT \
@@ -58,8 +60,16 @@ ARG POETRY_INSTALL_ARGS
 RUN poetry install $POETRY_INSTALL_ARGS --no-dev
 
 FROM base AS production
-ARG VENV_PATH
+ARG VENV_PATH \
+    APP_ROOT \
+    RUN_AS_USER_NAME \
+    RUN_AS_USER_UID
 COPY --from=app-prod $VENV_PATH $VENV_PATH
 
-USER 1000
+# Set up user and permissions
+RUN useradd -Ms /bin/bash -u $RUN_AS_USER_UID $RUN_AS_USER_NAME
+RUN chown -R $RUN_AS_USER_NAME:$RUN_AS_USER_NAME $APP_ROOT
+RUN chmod 755 $APP_ROOT
+
+USER $RUN_AS_USER_NAME
 ### END prod stage ###

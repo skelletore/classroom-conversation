@@ -4,6 +4,7 @@ module.exports = {
   webpack: {
     configure: {
       resolve: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
         fallback: {
           process: require.resolve("process/browser.js"),
           zlib: require.resolve("browserify-zlib"),

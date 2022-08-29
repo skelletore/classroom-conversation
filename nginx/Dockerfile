@@ -1,4 +1,4 @@
-FROM nginx:alpine as base
+FROM nginx:alpine AS base
 
 RUN apk upgrade --update-cache
 
@@ -20,8 +20,11 @@ RUN touch /var/run/nginx.pid && \
 
 USER nginx
 
-FROM base as development
+FROM base AS development
 COPY sites-available/dev.conf /etc/nginx/sites-enabled/classroom-conversation.conf
 
-FROM base as production
+FROM base AS production
 COPY sites-available/prod.conf /etc/nginx/sites-enabled/classroom-conversation.conf
+
+FROM base AS amucloud-prod
+COPY sites-available/prod-amucloud.conf /etc/nginx/sites-enabled/classroom-conversation.conf
