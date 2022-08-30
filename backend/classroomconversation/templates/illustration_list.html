@@ -20,7 +20,7 @@
     <td>{{ illustration.name}}</td>
     <td>{{ illustration.image.name}}</td>
     <td>{{ illustration.description}}</td>
-    <td><a href="{{ illustration.image.url }}">{% trans "table.action.download" %}</a></td>
+    <td><a href="/illustration/{{ illustration.name }}">{% trans "table.action.download" %}</a></td>
     <td>
       <button id="copy-link" onclick="copyLinkToClipboard('{{ illustration.image.url }}', false);">{% trans "table.action.copy" %}</button>
     </td>
