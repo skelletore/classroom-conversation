@@ -5,18 +5,14 @@ from django.core.files import File
 from .models import Conversation, Illustration
 
 from .validation import (
-    has_one_star_node,
+    has_one_start_node,
+    has_end_node,
     has_illegal_node_shapes,
-    has_octant_node,
     all_nodes_connected,
-    diamonds_connected_to_squares,
     broken_conversation,
     missing_edge_probability,
     wrong_probability_distribution,
-    one_type_of_child_nodes,
     all_nodes_contains_labels,
-    questions_have_questions,
-    questions_have_answers,
 )
 
 
@@ -66,37 +62,17 @@ class ConversationForm(forms.ModelForm):
             error_type = _("validation.doc.broken.conversation")
             raise forms.ValidationError([error_type] + errors)
 
-        is_valid, errors = has_one_star_node(file)
+        is_valid, errors = has_one_start_node(file)
         if not is_valid:
             error_type = _("validation.doc.one.star")
             raise forms.ValidationError([error_type] + errors)
 
-        if not has_octant_node(file):
+        if not has_end_node(file):
             raise forms.ValidationError(_("validation.doc.end.node"))
 
         is_valid, errors = has_illegal_node_shapes(file)
         if not is_valid:
             error_type = _("validation.doc.illegal.shapes")
-            raise forms.ValidationError([error_type] + errors)
-
-        is_valid, errors = diamonds_connected_to_squares(file)
-        if not is_valid:
-            error_type = _("validation.doc.diamonds.connections")
-            raise forms.ValidationError([error_type] + errors)
-
-        is_valid, errors = one_type_of_child_nodes(file)
-        if not is_valid:
-            error_type = _("validation.doc.child.nodes.type")
-            raise forms.ValidationError([error_type] + errors)
-
-        is_invalid, errors = questions_have_questions(file)
-        if is_invalid:
-            error_type = _("validation.doc.question.has.question")
-            raise forms.ValidationError([error_type] + errors)
-
-        is_valid, errors = questions_have_answers(file)
-        if not is_valid:
-            error_type = _("validation.doc.question.needs.answer")
             raise forms.ValidationError([error_type] + errors)
 
         is_valid, errors = all_nodes_contains_labels(file)

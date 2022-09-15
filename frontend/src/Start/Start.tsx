@@ -34,7 +34,7 @@ const Start = () => {
     `/api/document/${uuid}`,
     uuid
   )
-
+  
   if (loading) {
     return <Loading />
   }
@@ -73,7 +73,7 @@ const Start = () => {
               removeRecordedConversation()
               setHasSubmitted(false)
               history.push(
-                '/conversation/' + uuid + '/question/' + startNode.firstQuestion
+                `/conversation/${uuid}/${startNode.firstQuestion}`
               )
             }}
           >
@@ -83,7 +83,7 @@ const Start = () => {
             <button
               onClick={() =>
                 history.push(
-                  '/conversation/' + uuid + '/question/' + getLastQuestion(uuid)
+                  `/conversation/${uuid}/${getLastQuestion(uuid)}`
                 )
               }
             >

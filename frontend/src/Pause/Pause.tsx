@@ -49,7 +49,7 @@ const Pause = ({ uuid, id, next, current }: PauseProps) => {
             transition={{ delay: 2 }}
             key="alternatives"
             onClick={() =>
-              history.push('/conversation/' + uuid + '/question/' + id)
+              history.push(`/conversation/${uuid}/${id}`)
             }
           >
             {next.label}
