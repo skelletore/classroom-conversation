@@ -1,13 +1,10 @@
-from .const import DIAMOND, OCTAGON, RECTANGLE, STAR
+from .const import START_NODES, END_NODE, CHOICE_NODE, RESPONSE_NODE
 
 from .helpers import (
     get_node_label,
-    get_edge_label,
     get_node_shape,
     get_tree_root_graph,
-    get_node_by_id,
-    find_answers,
-    find_alternatives,
+    find_responses,
     find_illustrations,
 )
 
@@ -19,12 +16,11 @@ def graphml_to_json(file, uniform):
 
     out = {
         "uniform": uniform,
-        "start": "",
+        "start": {},
         "end": "",
-        "questions": {},
-        "answers": {},
-        "illustrations": {},
         "nodes": {},
+        "choices": {},
+        "responses": {},
     }
 
     for node in nodes:
@@ -39,35 +35,36 @@ def graphml_to_json(file, uniform):
 
         out["nodes"][id] = {"id": id, "shape": shape}
 
-        illustrations, _errors = find_illustrations(edges, root, graph)
-        if _errors:
-            errors += _errors
-        if illustrations:
-            out["illustrations"][id] = illustrations
-
-        if shape == RECTANGLE:
-            answers = find_answers(edges, uniform, root, graph)
-            out["questions"][id] = {
-                "id": id,
-                "shape": shape,
-                "label": label,
-                "answers": answers,
-            }
-        elif shape == DIAMOND:            
-            out["answers"][id] = {
-                "id": id,
-                "shape": shape,
-                "label": label,
-                "alternatives": find_alternatives(edges, root, graph)
-            }
-        elif STAR in shape:
+        illustrations, _illustration_errors = find_illustrations(edges, root, graph, illustration_type="any")
+        if _illustration_errors:
+            errors += _illustration_errors
+        
+        if shape in START_NODES:
             out["start"] = {
                 "id": id,
                 "label": label,
-                "type": shape,
+                "shape": shape,
                 "firstQuestion": edges[0].get("target"),
             }
-        elif shape == OCTAGON:
+        elif shape == END_NODE:
             out["end"] = id
+        else:
+            responses = find_responses(edges, uniform, root, graph)
+            if shape == CHOICE_NODE:
+                out["choices"][id] = {
+                    "id": id,
+                    "shape": shape,
+                    "label": label,
+                    "responses": responses,
+                    "illustrations": illustrations,
+                }
+            elif shape == RESPONSE_NODE:
+                out["responses"][id] = {
+                    "id": id,
+                    "shape": shape,
+                    "label": label,
+                    "illustrations": illustrations,
+                    "links": responses
+                }
 
     return out, errors

@@ -1,8 +1,11 @@
+from typing import Tuple
 import xml.etree.ElementTree as ElementTree
-from .const import DIAMOND, HEXAGON, OCTAGON, RECTANGLE, STAR
+
+from .const import START_NODE, END_NODE, CHOICE_NODE, RESPONSE_NODE, ILLUSTRATION_DEFAULT_NODE, ILLUSTRATION_CHOICE_NODE
+from .conversation_models import Illustration, Choice, Node, Response
 
 
-def get_graphml():
+def get_graphml() -> dict[str, str]:
     return {
         "graph": "{http://graphml.graphdrawing.org/xmlns}graph",
         "key": "{http://graphml.graphdrawing.org/xmlns}key",
@@ -27,7 +30,7 @@ def get_graphml():
 ########## VALIDATION HELPERS ###############
 
 
-def get_node_data_key(root):
+def get_node_data_key(root) -> str:
     graphml = get_graphml()
     for key in root.findall(graphml.get("key")):
         if key.get("yfiles.type") and key.get("yfiles.type") == "nodegraphics":
@@ -35,7 +38,7 @@ def get_node_data_key(root):
     return ""
 
 
-def get_edge_data_key(root):
+def get_edge_data_key(root) -> str:
     graphml = get_graphml()
     for key in root.findall(graphml.get("key")):
         if key.get("yfiles.type") and key.get("yfiles.type") == "edgegraphics":
@@ -53,7 +56,7 @@ def get_tree_root_graph(file):
     return (tree, root, graph, graphml)
 
 
-def get_all_nodes(graph):
+def get_all_nodes(graph) -> list[Node]:
     graphml = get_graphml()
     return graph.findall(graphml.get("node"))
 
@@ -68,7 +71,7 @@ def get_edge_data(edge, root):
     return edge.find(get_graphml().get("data") + "[@key='" + data_key + "']")
 
 
-def get_node_by_id(id, graph):
+def get_node_by_id(id, graph) -> Node:
     graphml = get_graphml()
     node = graph.find(graphml.get("node") + "[@id='" + id + "']")
     return node if node else None
@@ -77,7 +80,7 @@ def get_node_by_id(id, graph):
 ### LABEL HELPERS ###
 
 
-def get_node_label(node, root):
+def get_node_label(node, root) -> str:
     data_key = get_node_data_key(root)
 
     graphml = get_graphml()
@@ -91,7 +94,7 @@ def get_node_label(node, root):
     return ""
 
 
-def get_edge_label(edge, root):
+def get_edge_label(edge, root) -> str:
     graphml = get_graphml()
     data = get_edge_data(edge, root)
     line = data.find(graphml.get("polyLine"))
@@ -108,9 +111,7 @@ def get_edge_label(edge, root):
 
 
 ### HELPERS NODE SHAPE ###
-
-
-def get_node_shape(node, root):
+def get_node_shape(node, root) -> str:
     node_shape = None
     graphml = get_graphml()
     data_key_id = get_node_data_key(root)
@@ -123,50 +124,73 @@ def get_node_shape(node, root):
     return node_shape if node_shape else None
 
 
-def is_node_shape(shape, node, root):
+def is_node_shape(shape, node, root) -> bool:
     node_shape = get_node_shape(node, root)
     return shape in node_shape if node_shape else False
 
 
-def is_diamond(node, root):
+def is_start_node(node, root) -> bool:
     node_shape = get_node_shape(node, root)
-    return DIAMOND in node_shape if node_shape else False
+    return START_NODE in node_shape if node_shape else False
 
 
-def is_star(node, root):
+def is_end_node(node, root) -> bool:
     node_shape = get_node_shape(node, root)
-    return STAR in node_shape if node_shape else False
+    return END_NODE in node_shape if node_shape else False
 
 
-def is_rectangle(node, root):
+def is_choice_node(node, root) -> bool:
     node_shape = get_node_shape(node, root)
-    return RECTANGLE in node_shape if node_shape else False
+    return CHOICE_NODE in node_shape if node_shape else False
 
 
-def is_octagon(node, root):
+def is_response_node(node, root) -> bool:
     node_shape = get_node_shape(node, root)
-    return OCTAGON in node_shape if node_shape else False
+    return RESPONSE_NODE in node_shape if node_shape else False
 
 
-def is_hexagon(node, root):
+def is_illustration_default_node(node, root) -> bool:
     node_shape = get_node_shape(node, root)
-    return HEXAGON in node_shape if node_shape else False
+    return ILLUSTRATION_DEFAULT_NODE in node_shape if node_shape else False
 
 
-def get_all_rectangles(graph, root):
-    return [node for node in get_all_nodes(graph) if is_rectangle(node, root)]
+def is_illustration_choice_node(node, root) -> bool:
+    node_shape = get_node_shape(node, root)
+    return ILLUSTRATION_CHOICE_NODE in node_shape if node_shape else False
+
+
+def is_conversation_item_node(node, root) -> bool:
+    if is_choice_node(node, root) or is_response_node(node, root):
+        return True
+    return False
+
+
+def is_illustration_node(node, root) -> bool:
+    if is_illustration_default_node(node, root) or is_illustration_choice_node(node, root):
+        return True
+    return False
+
+
+def get_all_choices(graph, root) -> list[Choice]:
+    return [node for node in get_all_nodes(graph) if is_choice_node(node, root)]
+
+
+def get_all_responses(graph, root) -> list[Response]:
+    return [node for node in get_all_nodes(graph) if is_response_node(node, root)]
+
+
+def get_all_conversation_items(graph, root) -> list[Node]:
+    return [node for node in get_all_nodes(graph) if is_conversation_item_node(node, root)]
 
 
 ### PARSER HELPERS ###
-
-
-def find_answers(edges, uniform, root, graph):
-    answers = []
+def find_responses(edges, uniform, root, graph) -> list[Response]:
+    responses = []
     for edge in edges:
         target = edge.get("target")
         node = get_node_by_id(target, graph)
         shape = get_node_shape(node, root)
-        if not is_hexagon(node, root):
+        if not is_illustration_node(node, root):
             if not uniform:
                 probability = 0
                 try:
@@ -174,22 +198,12 @@ def find_answers(edges, uniform, root, graph):
                 except ValueError:
                     pass
 
-                answers.append(
+                responses.append(
                     {"id": target, "shape": shape, "probability": probability}
                 )
             else:
-                answers.append({"id": target, "shape": shape})
-    return answers
-
-
-def find_alternatives(edges, root, graph):
-    alternatives = []
-    for edge in edges:
-        target = edge.get("target")
-        node = get_node_by_id(target, graph)
-        if not is_hexagon(node, root):
-            alternatives.append(target)
-    return alternatives
+                responses.append({"id": target, "shape": shape})
+    return responses
 
 
 def is_valid_img_src(src: str) -> bool:
@@ -207,20 +221,30 @@ def is_valid_img_src(src: str) -> bool:
     return is_permitted()
 
 
-def find_illustrations(edges, root, graph):
-    # TODO: Move validation to validation.py
-    errors = []
-    illustrations = []
+def find_illustrations(edges, root, graph, illustration_type = "any") -> Tuple[list[Illustration], list[str]]:
+    if illustration_type and illustration_type not in ["any", "default", "choice"]:
+        return [], ["'illustration_type' must be one of 'any', 'default' or 'choice'"]
+    errors: list[str] = []
+    illustrations: list[Illustration] = []
     for edge in edges:
-        target = edge.get("target")
-        node = get_node_by_id(target, graph)
-        if is_hexagon(node, root):
+        target_id = edge.get("target")
+        node = get_node_by_id(target_id, graph)
+
+        if (
+            illustration_type == "any" and is_illustration_node(node, root)
+        ) or (
+            illustration_type == "default" and is_illustration_default_node(node, root)
+        ) or (
+            illustration_type == "choice" and is_illustration_choice_node(node, root)
+        ):
             label = get_node_label(node, root)
+            shape = get_node_shape(node, root)
             if is_valid_img_src(label):
                 illustrations.append(
-                    {"id": target, "img": label}
+                    {"id": target_id, "img": label, "shape": shape}
                 )
             else:
-                errors.append(f"Illustration linked to {target} is not a valid image source.")
-
+                # TODO: Improve traceability
+                errors.append(f"Illustration linked to '{target_id}' is not a valid image source.")
+    
     return illustrations, errors
