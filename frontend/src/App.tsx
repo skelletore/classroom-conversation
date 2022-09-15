@@ -69,7 +69,7 @@ function App() {
         <Route exact path="/conversation/:uuid/start" component={Start} />
         <Route
           exact
-          path="/conversation/:uuid/question/:id"
+          path="/conversation/:uuid/:id"
           component={ConversationComponent}
         />
       </Switch>
