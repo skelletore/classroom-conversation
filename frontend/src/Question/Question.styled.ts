@@ -1,94 +1,165 @@
 import styled from 'styled-components'
 
 import { calculateResponsiveSize } from './../helpers'
+import blackboard from '../static/background-small.png'
 
-export const StyledQuestion = styled.div`
-  min-height: 100%;
-  width: 100%;
+export const StyledConversation = styled.div`
+  height: -webkit-fill-available;
+  
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
-
-export const StyledAnswer = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  margin: 5%;
-
-  h2 {
-    width: 50%;
-    font-family: 'Gloria Hallelujah', cursive;
+  .container {
+    height: -webkit-fill-available;
+    display: grid;
+    grid-template-rows: 20% 40% 20% 20%;
+    grid-auto-columns: 1fr;
+    grid-auto-rows: 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
   }
 
-  .teacher {
-    padding-left: 10%;
-    padding-right: 2%;
-    text-align: left;
-  }
+  .conversation {
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 100%;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "question answers";
+    grid-area: 1 / 1 / 2 / 2;
+    min-height: 300px;
+    max-height: 300px;
 
-  .student {
-    padding-left: 2%;
-    padding-right: 10%;
-    text-align: right;
-  }
-`
-
-export const StyledIllustration = styled.img`
-  align-items: center;
-  text-align: center;
-  max-width: 25%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-`
-
-export const StyledAlternatives = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  position: fixed;
-  bottom: 0;
-
-  .alternatives {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 0;
-    padding: 10px;
-    min-height: 150px;
-
-    @media screen and (max-width: 600px) {
-      flex-direction: column;
-      justify-content: space-around;
+    h2 {
+      font-family: 'Gloria Hallelujah', cursive;
     }
   }
 
-  button {
-    margin: 0 10px;
+  .question {
+    grid-area: question;
   }
-`
 
-export const StyledIcons = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-around;
+  .answers {
+    text-align: right;
+    grid-area: answers;
 
-  .teacher {
-    width: ${calculateResponsiveSize(150, 400)};
+    .linkedResponse {
+      margin-top: 50px;
+    }
   }
-  .students {
-    justify-content: flex-end;
+
+  .media {
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    grid-template-rows: 100%;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      ". illustrationContainer .";
+    grid-area: 2 / 1 / 3 / 2;
+
+    .illustrationContainer {
+      height: ${calculateResponsiveSize(200, 350)};
+      border: 3px solid rgba(0, 0, 0, .75);
+      box-shadow: 2px 2px rgba(0, 0, 0, .5);
+      background-image: url(${blackboard});
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #FFFFFF;
+      font-size: 1rem;
+      grid-area: illustrationContainer;
+
+      .illustration {
+        position: relative;
+        transform: translate(0%, 50%);
+        align-items: center;
+        text-align: center;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 75%;
+      }
+    }
   }
-  .student {
-    width: ${calculateResponsiveSize(69, 200)};
+
+  .avatars {
+    position: fixed;
+    bottom: 175px;
+    width: 100%;
+    max-height: 300px;
+    display: grid;
+    grid-template-columns: 40% 20% 40%;
+    grid-template-rows: 100%;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "teacher . students";
+    grid-area: 2 / 1 / 3 / 2;
+
+    .teacher {
+      width: ${calculateResponsiveSize(75, 200)};
+      grid-area: teacher;
+      margin-left: 5%;
+    }
+
+    .students {
+      position: absolute;
+      right: 0px;
+      bottom: 0px;
+      display: flex;
+      flex-direction: row;
+      grid-area: students;
+
+      .student {
+        width: ${calculateResponsiveSize(50, 165)};
+      }
+    }
+  }
+
+  .choices {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 100%;
+    gap: 0px 0px;
+    grid-template-areas: 
+      "questions illustrations"; 
+    grid-area: 3 / 1 / 4 / 2; 
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: rgba(160, 160, 160, 0.5);
+    border-radius: 0;
+    padding: 10px;
+    min-height: 150px;
+    position: fixed;
+    bottom: 0;
+
+    flex-direction: row;
+    justify-content: space-around;
+
+    .questions {
+      margin-left: 5%;
+      position: absolute;
+      left: 0px;
+      grid-area: questions;
+      
+      button {
+        margin: 0px 10px 10px 0px;
+      }
+    }
+    .illustrations {
+      margin-right: 5%;
+      position: absolute;
+      right: 0px;
+      grid-area: illustrations;
+
+      .illustration {
+        margin: 0 10px;
+        width: ${calculateResponsiveSize(100, 220)};;
+      }
+    }
   }
 `
