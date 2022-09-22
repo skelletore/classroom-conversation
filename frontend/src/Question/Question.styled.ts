@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import { calculateResponsiveSize } from './../helpers'
 
-export const Convo = styled.div`
+export const StyledConversation = styled.div`
   height: -webkit-fill-available;
   
 
@@ -28,6 +28,8 @@ export const Convo = styled.div`
     grid-template-areas:
       "question answers";
     grid-area: 1 / 1 / 2 / 2;
+    min-height: 300px;
+    max-height: 300px;
 
     h2 {
       font-family: 'Gloria Hallelujah', cursive;
