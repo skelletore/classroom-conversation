@@ -88,6 +88,7 @@ export const Convo = styled.div`
     .teacher {
       width: ${calculateResponsiveSize(75, 200)};
       grid-area: teacher;
+      margin-left: 5%;
     }
 
     .students {
@@ -126,15 +127,24 @@ export const Convo = styled.div`
     justify-content: space-around;
 
     .questions {
+      margin-left: 5%;
+      position: absolute;
+      left: 0px;
+      grid-area: questions;
+      
       button {
         margin: 0 10px;
       }
-      grid-area: questions;
     }
     .illustrations {
+      margin-right: 5%;
+      position: absolute;
+      right: 0px;
       grid-area: illustrations;
 
       .illustration {
+        margin: 0 10px;
+        width: 220px;
       }
     }
   }
