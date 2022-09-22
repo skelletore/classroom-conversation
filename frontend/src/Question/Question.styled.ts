@@ -151,34 +151,3 @@ export const StyledConversation = styled.div`
     }
   }
 `
-
-export const StyledAlternatives = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  position: fixed;
-  bottom: 0;
-
-  .alternatives {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 0;
-    padding: 10px;
-    min-height: 150px;
-
-    @media screen and (max-width: 600px) {
-      flex-direction: column;
-      justify-content: space-around;
-    }
-  }
-
-  button {
-    margin: 0 10px;
-  }
-`
