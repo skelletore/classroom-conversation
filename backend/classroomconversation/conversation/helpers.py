@@ -1,8 +1,10 @@
 from typing import Tuple
 import xml.etree.ElementTree as ElementTree
+from urllib.parse import urlparse
+import re
 
 from .const import START_NODE, END_NODE, CHOICE_NODE, RESPONSE_NODE, ILLUSTRATION_DEFAULT_NODE, ILLUSTRATION_CHOICE_NODE
-from .conversation_models import Illustration, Choice, Node, Response
+from .conversation_models import Illustration, LinkedConversationItem, Node
 
 
 def get_graphml() -> dict[str, str]:
@@ -171,11 +173,11 @@ def is_illustration_node(node, root) -> bool:
     return False
 
 
-def get_all_choices(graph, root) -> list[Choice]:
+def get_all_choices(graph, root) -> list[Node]:
     return [node for node in get_all_nodes(graph) if is_choice_node(node, root)]
 
 
-def get_all_responses(graph, root) -> list[Response]:
+def get_all_responses(graph, root) -> list[Node]:
     return [node for node in get_all_nodes(graph) if is_response_node(node, root)]
 
 
@@ -183,15 +185,19 @@ def get_all_conversation_items(graph, root) -> list[Node]:
     return [node for node in get_all_nodes(graph) if is_conversation_item_node(node, root)]
 
 
+def get_all_illustrations(graph, root) -> list[Node]:
+    return [node for node in get_all_nodes(graph) if is_illustration_node(node, root)]
+
+
 ### PARSER HELPERS ###
-def find_responses(edges, uniform, root, graph) -> list[Response]:
+def find_linked_conversation_items(edges, uniform, root, graph) -> list[LinkedConversationItem]:
     responses = []
     for edge in edges:
         target = edge.get("target")
         node = get_node_by_id(target, graph)
         shape = get_node_shape(node, root)
-        if not is_illustration_node(node, root):
-            if not uniform:
+        if is_conversation_item_node(node, root):
+            if not uniform and is_response_node(node, root):
                 probability = 0
                 try:
                     probability = float(get_edge_label(edge, root))
@@ -207,23 +213,32 @@ def find_responses(edges, uniform, root, graph) -> list[Response]:
 
 
 def is_valid_img_src(src: str) -> bool:
-    # TODO: FIX
-    PERMITTED_IMG_SOURCES = ["*"]
+    PERMITTED_IMG_SOURCES = ["internal"]    # use ["*"] to allow any source
     def is_permitted():
-        if not PERMITTED_IMG_SOURCES:
+        if not PERMITTED_IMG_SOURCES or len(PERMITTED_IMG_SOURCES) < 1:
             return False
-        if PERMITTED_IMG_SOURCES[0] == "*":
+        if "*" in PERMITTED_IMG_SOURCES:
             return True
-        # TODO: get base domain
-        if src in PERMITTED_IMG_SOURCES:
-            return True
-        return False
+        try:
+            # split url
+            url = urlparse(src)
+            # no domain, i.e. internally hosted
+            if url.netloc == "":
+                # ensure that path, i.e. image name, is valid
+                return re.match(r"^[a-zA-Z0-9-_]{1,}$", url.path)
+            if url.netloc in PERMITTED_IMG_SOURCES:
+                return True
+            return False
+        except Exception as error:
+            print(f"An error occurred while validating image source '{src}'.")
+            print(error)
+            return False
     return is_permitted()
 
 
 def find_illustrations(edges, root, graph, illustration_type = "any") -> Tuple[list[Illustration], list[str]]:
-    if illustration_type and illustration_type not in ["any", "default", "choice"]:
-        return [], ["'illustration_type' must be one of 'any', 'default' or 'choice'"]
+    if (illustration_type and illustration_type not in ["any", "default", "choice"]) or illustration_type == None:
+        illustration_type = "any"
     errors: list[str] = []
     illustrations: list[Illustration] = []
     for edge in edges:
@@ -239,12 +254,8 @@ def find_illustrations(edges, root, graph, illustration_type = "any") -> Tuple[l
         ):
             label = get_node_label(node, root)
             shape = get_node_shape(node, root)
-            if is_valid_img_src(label):
-                illustrations.append(
+            illustrations.append(
                     {"id": target_id, "img": label, "shape": shape}
-                )
-            else:
-                # TODO: Improve traceability
-                errors.append(f"Illustration linked to '{target_id}' is not a valid image source.")
+                )                
     
     return illustrations, errors
