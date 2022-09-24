@@ -4,7 +4,7 @@ from .helpers import (
     get_node_label,
     get_node_shape,
     get_tree_root_graph,
-    find_responses,
+    find_linked_conversation_items,
     find_illustrations,
 )
 
@@ -49,13 +49,13 @@ def graphml_to_json(file, uniform):
         elif shape == END_NODE:
             out["end"] = id
         else:
-            responses = find_responses(edges, uniform, root, graph)
+            links = find_linked_conversation_items(edges, uniform, root, graph)
             if shape == CHOICE_NODE:
                 out["choices"][id] = {
                     "id": id,
                     "shape": shape,
                     "label": label,
-                    "responses": responses,
+                    "responses": links,
                     "illustrations": illustrations,
                 }
             elif shape == RESPONSE_NODE:
@@ -64,7 +64,7 @@ def graphml_to_json(file, uniform):
                     "shape": shape,
                     "label": label,
                     "illustrations": illustrations,
-                    "links": responses
+                    "links": links,
                 }
 
     return out, errors
