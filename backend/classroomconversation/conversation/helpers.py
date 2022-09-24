@@ -254,6 +254,10 @@ def find_illustrations(edges, root, graph, illustration_type = "any") -> Tuple[l
         ):
             label = get_node_label(node, root)
             shape = get_node_shape(node, root)
+
+            # prefix internals with /illustration/
+            if re.match(r"^[a-zA-Z0-9-_]{1,}$", label):
+                label = f"/illustration/{label}"
             illustrations.append(
                     {"id": target_id, "img": label, "shape": shape}
                 )                
