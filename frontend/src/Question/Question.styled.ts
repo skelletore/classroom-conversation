@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { calculateResponsiveSize } from './../helpers'
+import blackboard from '../static/background-small.png'
 
 export const StyledConversation = styled.div`
   height: -webkit-fill-available;
@@ -60,9 +61,20 @@ export const StyledConversation = styled.div`
     grid-area: 2 / 1 / 3 / 2;
 
     .illustrationContainer {
+      height: ${calculateResponsiveSize(200, 350)};
+      border: 3px solid rgba(0, 0, 0, .75);
+      box-shadow: 2px 2px rgba(0, 0, 0, .5);
+      background-image: url(${blackboard});
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #FFFFFF;
+      font-size: 1rem;
       grid-area: illustrationContainer;
 
       .illustration {
+        position: relative;
+        transform: translate(0%, 50%);
         align-items: center;
         text-align: center;
         display: block;
@@ -118,7 +130,7 @@ export const StyledConversation = styled.div`
     align-items: center;
     justify-content: center;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(160, 160, 160, 0.5);
     border-radius: 0;
     padding: 10px;
     min-height: 150px;
@@ -135,7 +147,7 @@ export const StyledConversation = styled.div`
       grid-area: questions;
       
       button {
-        margin: 0 10px;
+        margin: 0px 10px 10px 0px;
       }
     }
     .illustrations {
@@ -146,7 +158,7 @@ export const StyledConversation = styled.div`
 
       .illustration {
         margin: 0 10px;
-        width: 220px;
+        width: ${calculateResponsiveSize(100, 220)};;
       }
     }
   }

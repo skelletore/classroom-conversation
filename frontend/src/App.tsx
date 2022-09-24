@@ -24,11 +24,6 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background-image: url(${background});
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    color: #FFFFFF;
     font-size: 1rem;
   }
   
