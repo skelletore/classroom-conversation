@@ -15,7 +15,7 @@ const Landingpage = () => {
         <p>Er du her for å øve? Ta en titt på alle tilgjengelige samtaler!</p>
         <br></br>
         <br></br>
-        <button onClick={() => history.push('/browse')}>Alle samtaler</button>
+        <button className='btn-dark' onClick={() => history.push('/browse')}>Alle samtaler</button>
       </div>
       <p className="credits" onClick={() => history.push('/credits')}>
         (Krediteringer)
