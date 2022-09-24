@@ -11,6 +11,7 @@ export type Illustration = {
   id: string
   shape: string
   img: string
+  links: Node[]
 }
 
 export type ChoiceResponse = {

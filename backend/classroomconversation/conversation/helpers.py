@@ -236,7 +236,7 @@ def is_valid_img_src(src: str) -> bool:
     return is_permitted()
 
 
-def find_illustrations(edges, root, graph, illustration_type = "any") -> Tuple[list[Illustration], list[str]]:
+def find_illustrations(edges, root, graph, uniform, illustration_type = "any") -> Tuple[list[Illustration], list[str]]:
     if (illustration_type and illustration_type not in ["any", "default", "choice"]) or illustration_type == None:
         illustration_type = "any"
     errors: list[str] = []
@@ -244,6 +244,8 @@ def find_illustrations(edges, root, graph, illustration_type = "any") -> Tuple[l
     for edge in edges:
         target_id = edge.get("target")
         node = get_node_by_id(target_id, graph)
+
+        links = find_linked_conversation_items(edges, uniform, root, graph)
 
         if (
             illustration_type == "any" and is_illustration_node(node, root)
@@ -258,8 +260,6 @@ def find_illustrations(edges, root, graph, illustration_type = "any") -> Tuple[l
             # prefix internals with /illustration/
             if re.match(r"^[a-zA-Z0-9-_]{1,}$", label):
                 label = f"/illustration/{label}"
-            illustrations.append(
-                    {"id": target_id, "img": label, "shape": shape}
-                )                
+            illustrations.append({"id": target_id, "img": label, "shape": shape, "links": links})                
     
     return illustrations, errors
