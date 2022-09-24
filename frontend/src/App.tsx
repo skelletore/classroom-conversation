@@ -7,7 +7,6 @@ import Landingpage from './Landingpage/Landingpage'
 import ConversationComponent from './Conversation/Conversation'
 import Start from './Start/Start'
 
-import background from './static/background-small.png'
 import Browse from './Browse/Browse'
 import Credits from './Credits/Credits'
 
@@ -37,17 +36,15 @@ const GlobalStyle = createGlobalStyle`
     outline: none;
     box-shadow: none;
     border-radius: 8px;
-    border: 1px solid white;
+    border: 1px solid black;
     padding: 1rem;
     font-size: 1rem;
-    background-color: transparent;
-    text-decoration: none;
     cursor: pointer;
-    color: white;
   }
 
-  button.dark {
+  .btn-dark {
     background-color: #363334;
+    color: #FFFFFF;
     border: none;
   }
 `
