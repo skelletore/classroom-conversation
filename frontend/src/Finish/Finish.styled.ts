@@ -33,9 +33,6 @@ export const StyledFinish = styled.div`
   .sample-exit {
     opacity: 1;
   }
-  .download {
-    color: white;
-  }
 
   div {
     width: 100%;
