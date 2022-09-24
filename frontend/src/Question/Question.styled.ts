@@ -74,7 +74,6 @@ export const StyledConversation = styled.div`
 
       .illustration {
         position: relative;
-        transform: translate(0%, 50%);
         align-items: center;
         text-align: center;
         display: block;

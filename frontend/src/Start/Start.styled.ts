@@ -36,7 +36,7 @@ const StyledStart = styled.div`
     margin: 0 10px;
     cursor: pointer;
 
-    border: 1px white;
+    border: 2px black;
     padding: 20px;
     border-style: hidden;
   }
