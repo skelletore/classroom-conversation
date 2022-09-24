@@ -15,8 +15,8 @@ class ConversationNode(Node):
     illustrations: list[Illustration]
 
 
-class LinkedResponse(ConversationNode):
-    probability: float
+class LinkedConversationItem(ConversationNode):
+    probability: float | None
 
 
 class Response(ConversationNode):
