@@ -35,7 +35,7 @@ def graphml_to_json(file, uniform):
 
         out["nodes"][id] = {"id": id, "shape": shape}
 
-        illustrations, _illustration_errors = find_illustrations(edges, root, graph, illustration_type="any")
+        illustrations, _illustration_errors = find_illustrations(edges, root, graph, uniform, illustration_type="any")
         if _illustration_errors:
             errors += _illustration_errors
         

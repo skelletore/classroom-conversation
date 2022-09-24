@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { selectRandomAnswers } from './helpers'
+import { selectRandomResponses } from './helpers'
 
 export function useLocalStorage<T>(uuid: string): [T, (v: T) => void] {
   const [storedValue, setStoredValue] = useState<T>(() => {
@@ -20,7 +20,7 @@ export function useLocalStorage<T>(uuid: string): [T, (v: T) => void] {
         '' + (Math.floor(Math.random() * 2) + 1)
       )
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
@@ -42,8 +42,8 @@ export function useFetchAndStoreConversation<Conversation>(
       const conversation = await response.json()
 
       if (conversation) {
-        conversation.json.questions = selectRandomAnswers(
-          conversation.json.questions,
+        conversation.json.choices = selectRandomResponses(
+          conversation.json.choices,
           conversation.json.uniform
         )
         setData(conversation)

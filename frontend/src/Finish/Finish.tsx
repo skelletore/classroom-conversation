@@ -9,9 +9,9 @@ import {
   getSelectedAvatar,
   prepareConversationForSubmission,
   submitConversation,
-  getRandomStudent,
+  getRandomStudents,
 } from './../helpers'
-import { UrlParams, Questions, Question, Answers, Answer } from './../types'
+import { UrlParams, Choice, Choices, Response, Responses } from './../types'
 
 import clock from './../static/clock.png'
 
@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     margin: 15,
   },
-  question: { fontSize: 14, marginBottom: 3 },
-  answer: { fontSize: 12 },
+  choice: { fontSize: 14, marginBottom: 3 },
+  response: { fontSize: 12 },
   notes: {
     height: '91%',
     margin: '5%',
@@ -105,9 +105,9 @@ const styles = StyleSheet.create({
 type PDFProps = {
   name: string
   intro: string
-  questions: Questions
+  choices: Choices
   dialog: string[]
-  answers: Answers
+  responses: Responses
   student: string
   teacher: string
 }
@@ -115,8 +115,8 @@ type PDFProps = {
 type FinishProps = {
   name: string
   intro: string
-  questions: Questions
-  answers: Answers
+  choices: Choices
+  responses: Responses
 }
 
 const getDate = () => {
@@ -127,9 +127,9 @@ const getDate = () => {
 const PDFDocument = ({
   name,
   intro,
-  questions,
+  choices,
   dialog,
-  answers,
+  responses,
   student,
   teacher,
 }: PDFProps) => (
@@ -145,18 +145,18 @@ const PDFDocument = ({
 
     <Page size="A4" style={styles.page}>
       {dialog.map((q, i) => {
-        const question: Question = questions[q]
-        const answer: Answer = answers[questions[q].selectedAnswer]
+        const choice: Choice = choices[q]
+        const response: Response = responses[choices[q].selectedResponse]
 
         return (
           <View key={i} style={styles.section}>
-            <Text style={styles.question}>
+            <Text style={styles.choice}>
               {i < dialog.length - 1 ? `Lærer ${i + 1}: ` : `Avslutning: `}
-              {question.label}
+              {choice.label}
             </Text>
-            {answer && i < dialog.length - 1 && (
-              <Text style={styles.answer}>
-                Elev: {answer ? answer.label : ''}
+            {choice && response && i < dialog.length - 1 && (
+              <Text style={styles.response}>
+                Elev: {response ? response.label : ''}
               </Text>
             )}
           </View>
@@ -171,7 +171,7 @@ const PDFDocument = ({
   </Document>
 )
 
-const Finish = ({ name, intro, questions, answers }: FinishProps) => {
+const Finish = ({ name, intro, choices, responses }: FinishProps) => {
   const history = useHistory()
   const { uuid } = useParams<UrlParams>()
   const [hasSubmitted, setHasSubmitted] =
@@ -179,14 +179,14 @@ const Finish = ({ name, intro, questions, answers }: FinishProps) => {
 
   const teacherImg: string =
     getSelectedAvatar() === 1 ? teacherFemale : teacherMale
-  const studentImg: string = getRandomStudent()
+  const studentImg: string = getRandomStudents(1)[0]
   const finishedAt = new Date().toISOString()
   const pdfFileName = `conversation-${finishedAt}.pdf`
 
   const dialogue = getRecordedConversation(uuid)
-  const choices = prepareConversationForSubmission(dialogue, questions, answers)
+  const choiceHistory = prepareConversationForSubmission(dialogue, choices, responses)
   if (!hasSubmitted) {
-    submitConversation(uuid, choices)
+    submitConversation(uuid, choiceHistory)
     setHasSubmitted(true)
   }
 
@@ -195,6 +195,7 @@ const Finish = ({ name, intro, questions, answers }: FinishProps) => {
       <h1>Samtalen er nå ferdig!</h1>
       <div>
         <button
+          className='btn-dark'
           onClick={() => {
             removeConversation(uuid)
             history.push('/conversation/' + uuid + '/start')
@@ -204,14 +205,14 @@ const Finish = ({ name, intro, questions, answers }: FinishProps) => {
         </button>
 
         <PDFDownloadLink
-          className="download"
+          className='btn-dark'
           document={
             <PDFDocument
               name={name}
               intro={intro}
-              questions={questions}
+              choices={choices}
               dialog={dialogue}
-              answers={answers}
+              responses={responses}
               student={studentImg}
               teacher={teacherImg}
             />
@@ -223,7 +224,7 @@ const Finish = ({ name, intro, questions, answers }: FinishProps) => {
           }
         </PDFDownloadLink>
 
-        <button onClick={() => history.push('/browse/')}>
+        <button className='btn-dark' onClick={() => history.push('/browse/')}>
           Velg ny samtale
         </button>
       </div>

@@ -1,3 +1,87 @@
+export type Node = {
+  id: string
+  shape: string
+}
+
+export type Nodes = {
+  [id: string]: Node
+}
+
+export type Illustration = {
+  id: string
+  shape: string
+  img: string
+  links: Node[]
+}
+
+export type ChoiceResponse = {
+  id: string
+  shape: string
+  percentage?: number
+}
+
+export type Choice = {
+  id: string
+  shape: string
+  label: string
+  illustrations: Illustration[]
+  responses: ChoiceResponse[]
+  selectedResponse: string
+}
+
+export type Choices = {
+  [id: string]: Choice
+}
+
+export type Response = {
+  id: string
+  shape: string
+  label: string
+  illustrations: Illustration[]
+  links: Node[]
+  probability?: number
+}
+
+export type Responses = {
+  [id: string]: Response
+}
+
+export type StartNode = {
+  id: string
+  shape: string
+  firstQuestion: string
+  label: string
+}
+
+export type Graph = {
+  start: StartNode
+  end: string
+  choices: Choices
+  responses: Responses
+  nodes: Nodes
+  uniform: boolean
+}
+
+export type Conversation = {
+  name: string
+  uuid: string
+  description: string
+  json: Graph
+  document: string
+  errors?: string[]
+  created: string
+  updated: string
+}
+
+export type ConversationItem = {
+  id: string
+  shape: string
+  label: string
+  illustrations?: Illustration[]
+  responses?: Node[]
+  selectedResponse?: string
+}
+
 export type Question = {
   id: string
   label: string
@@ -10,68 +94,6 @@ export type Question = {
   selectedAnswer: string
 }
 
-export type Questions = {
-  [id: string]: Question
-}
-
-export type Answer = {
-  id: string
-  label: string
-  shape: string
-  alternatives: Array<string>
-}
-
-export type Answers = {
-  [id: string]: Answer
-}
-
-export type Illustration = {
-  id: string
-  label?: string
-  img: string
-}
-
-export type Illustrations = {
-  [id: string]: Array<Illustration>
-}
-
-export type StartNode = {
-  id: string
-  firstQuestion: string
-  label: string
-  type: string
-}
-
-export type Node = {
-  id: string
-  shape: string
-}
-
-export type Nodes = {
-  [id: string]: Node
-}
-
-export type Graph = {
-  answers: Answers
-  questions: Questions
-  illustrations: Illustrations
-  nodes: Nodes
-  start: StartNode
-  end: string
-  uniform: boolean
-}
-
-export type Conversation = {
-  json: Graph
-  errors: Array<string>
-  name: string
-  uuid: string
-  end: string
-  description: string
-  updated: string
-  document: string
-}
-
 export type UrlParams = {
   uuid: string
   id: string
@@ -80,6 +102,6 @@ export type UrlParams = {
 export type PauseProps = {
   uuid: string
   id: string
-  current: Question
-  next: Question
+  current: ConversationItem
+  next: ConversationItem
 }

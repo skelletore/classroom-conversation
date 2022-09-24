@@ -80,6 +80,7 @@ export const StyledConversation = styled.div`
         margin-left: auto;
         margin-right: auto;
         max-width: 75%;
+        max-height: -webkit-fill-available;
       }
     }
   }

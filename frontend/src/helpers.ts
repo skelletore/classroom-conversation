@@ -1,4 +1,4 @@
-import { Answer, Answers, Question, Questions } from './types'
+import { Choice, Choices, Response, Responses } from './types'
 
 import { SUBMIT_CONVERSATION_PATH } from './const'
 import axios, { AxiosError, AxiosResponse } from 'axios'
@@ -19,8 +19,8 @@ export const isFinishNode = (id: string, endNode: string) => id === endNode
 export const calculateResponsiveSize = (min: number, max: number) =>
   `calc(${min}px + (${max} - ${min}) * ((100vw - 300px) / (1600 - 300)))`
 
-const nonUniformRandomAnswer = (
-  answers: Array<{
+const nonUniformRandomResponse = (
+  responses: Array<{
     id: string
     probability?: number
   }>
@@ -28,39 +28,40 @@ const nonUniformRandomAnswer = (
   const random = Math.random()
   let aggregated_probability = 0
 
-  const aggrgatedProb = answers.map((answer) => {
-    aggregated_probability += answer.probability || 0
-    return { id: answer.id, propability: aggregated_probability }
+  const aggregatedProb = Object.values(responses).map((response) => {
+    aggregated_probability += response.probability || 0
+    return { id: response.id, probability: aggregated_probability }
   })
 
   return (
-    aggrgatedProb.find((answer) => answer.propability >= random)?.id ||
-    answers[0].id
+    aggregatedProb.find((response) => response.probability >= random)?.id ||
+    responses[0].id
   )
 }
 
-export const uniformRandomAnswer = (
-  answers: Array<{
+export const uniformRandomResponse = (
+  responses: Array<{
     id: string
   }>
 ) => {
-  return answers[Math.floor(Math.random() * answers.length)].id
+  return responses[Math.floor(Math.random() * responses.length)].id
 }
 
-export const selectRandomAnswers = (questions: Questions, uniform: boolean) => {
-  for (let id in questions) {
+export const selectRandomResponses = (choices: Choices, uniform: boolean) => {
+  for (let id in choices) {
+    if (choices[id].responses.length < 1) continue
     if (uniform) {
-      questions[id].selectedAnswer = uniformRandomAnswer(questions[id].answers)
+      choices[id].selectedResponse = uniformRandomResponse(choices[id].responses)
     } else {
-      questions[id].selectedAnswer = nonUniformRandomAnswer(
-        questions[id].answers
+      choices[id].selectedResponse = nonUniformRandomResponse(
+        choices[id].responses
       )
     }
   }
-  return questions
+  return choices
 }
 
-export const addQuestionToConversation = (id: string, uuid: string): void => {
+export const addChoiceToConversation = (id: string, uuid: string): void => {
   const conversation: string[] = getRecordedConversation(uuid)
 
   if (conversation.indexOf(id) >= 0) {
@@ -116,7 +117,8 @@ export const getSelectedStudent = (uuid: string): number => {
   return student != null ? parseInt(student) : 1
 }
 
-export const getRandomStudent = (): string => {
+export const getRandomStudents = (count: number = 1): string[] => {
+  const avatars: string[] = []
   const students = [
     student1,
     studentBoy1,
@@ -127,7 +129,14 @@ export const getRandomStudent = (): string => {
     studentGirl3,
     studentGirl4
   ]
-  return students[Math.floor(Math.random() * students.length)] 
+  if (count > students.length) count = students.length
+
+  for (let i=0; i < count; i++) {
+    let filtered = students.filter((student) => !avatars.includes(student))
+    avatars.push(filtered[Math.floor(Math.random() * filtered.length)])
+  }
+
+  return avatars
 }
 
 export const poorMansUUID = (length = 10): string => {
@@ -152,24 +161,24 @@ export const getCsrfToken = (): string | undefined => {
 
 export const prepareConversationForSubmission = (
   dialogue: string[],
-  questions: Questions,
-  answers: Answers
+  choices: Choices,
+  responses: Responses
 ): Record<string, Record<string, string>> => {
-  const choices: Record<string, Record<string, string>> = {}
+  const history: Record<string, Record<string, string>> = {}
 
   dialogue.forEach((q, i) => {
-    const question: Question = questions[q]
-    const answer: Answer = answers[question.selectedAnswer]
-    if (question && answer && i < dialogue.length - 1) {
-      choices[q] = {
-        question: question.label,
-        answer_id: question.selectedAnswer,
-        answer: answer.label,
+    const choice: Choice = choices[q]
+    const response: Response = responses[choice.selectedResponse]
+    if (choice && response && i < dialogue.length - 1) {
+      history[q] = {
+        choice: choice.label,
+        response_id: choice.selectedResponse,
+        response: response.label,
       }
     }
   })
 
-  return choices
+  return history
 }
 
 export const submitConversation = (
@@ -189,7 +198,6 @@ export const submitConversation = (
         headers: { 'X-CSRFToken': csrftoken, mode: 'same-origin' },
       })
       .then((response: AxiosResponse) => {
-        console.log(response)
         return true
       })
       .catch((err: AxiosError) => {
