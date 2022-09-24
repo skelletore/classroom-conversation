@@ -2,48 +2,39 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 
 import { useFetchAndStoreConversation } from '../hooks'
-import { addQuestionToConversation } from './../helpers'
+import { addChoiceToConversation } from './../helpers'
 import {
+  UrlParams,
   Conversation,
   Graph,
-  UrlParams,
-  Question,
-  Questions,
-  Answers,
   StartNode,
+  Choice,
+  Choices,
+  Responses,
 } from '../types'
+import { NODE_SHAPE } from '../const'
 
-import QuestionComponent from './../Question/Question'
+import ConversationItemComponent from './../Question/Question'
 import Finish from './../Finish/Finish'
 import Pause from './../Pause/Pause'
 import Loading from './../Loading/Loading'
 import Notfound from '../Notfound/Notfound'
 
-const nodeShape = {
-  ROUND_RECTANGLE: 'roundrectangle',
-  DIAMOND: 'diamond',
-}
-
 const isConversationFinished = (
-  id: string,
-  questions: Questions,
+  choice: Choice,
   end: string
 ): boolean => {
-  if (id === end) {
-    return true
-  }
-  const question: Question = questions[id]
+  if (!choice) return true
+  if (choice.responses.length < 1) return true
+  if (choice.id === end) return true
+  if (choice.responses.length === 1 && choice.responses[0].id === end) return true
 
-  return (
-    question &&
-    question.answers.length === 1 &&
-    (id === end || question.answers[0].id === end)
-  )
+  return false
 }
 
-const isNextQuestion = (question: Question): boolean =>
-  question.answers.length === 1 &&
-  question.answers[0].shape === nodeShape.ROUND_RECTANGLE
+const isNextChoice = (choice: Choice): boolean =>
+  choice.responses.length === 1 &&
+  choice.responses[0].shape in [NODE_SHAPE.CHOICE, NODE_SHAPE.RESPONSE]
 
 const ConversationComponent = () => {
   const { uuid, id } = useParams<UrlParams>()
@@ -60,38 +51,38 @@ const ConversationComponent = () => {
     return <Notfound />
   }
 
-  addQuestionToConversation(id, uuid)
+  addChoiceToConversation(id, uuid)
 
   const graph: Graph = data.json
-  const answers: Answers = graph.answers
-  const questions: Questions = graph.questions
+  const choices: Choices = graph.choices
+  const responses: Responses = graph.responses
   const startNode: StartNode = data.json.start
 
-  if (isConversationFinished(id, questions, graph.end)) {
+  if (isConversationFinished(choices[id], graph.end)) {
     return (
       <Finish
         name={data.name}
         intro={startNode.label}
-        questions={questions}
-        answers={answers}
+        choices={choices}
+        responses={responses}
       />
     )
   }
 
-  const question: Question = questions[id]
+  const choice: Choice = choices[id]
 
-  if (isNextQuestion(question)) {
-    const nextQuestion: Question = questions[question.answers[0].id]
+  if (isNextChoice(choice)) {
+    const nextChoice: Choice = choices[choice.responses[0].id]
     return (
       <Pause
         uuid={uuid}
-        id={nextQuestion.id}
-        current={question}
-        next={nextQuestion}
+        id={nextChoice.id}
+        current={choice}
+        next={nextChoice}
       />
     )
   }
-  return <QuestionComponent graph={graph} uuid={uuid} id={id} />
+  return <ConversationItemComponent graph={graph} uuid={uuid} id={id} />
 }
 
 export default ConversationComponent
