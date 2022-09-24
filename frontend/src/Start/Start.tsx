@@ -69,6 +69,7 @@ const Start = () => {
 
         <div className="actions">
           <button
+            className='btn-dark'
             onClick={() => {
               removeRecordedConversation()
               setHasSubmitted(false)
@@ -77,10 +78,11 @@ const Start = () => {
               )
             }}
           >
-            {hasDialog ? 'Start samtalen på ny' : 'Start matteundervisningen'}
+            {hasDialog ? 'Start samtalen på ny' : 'Start undervisningen'}
           </button>
           {hasDialog && (
             <button
+              className='btn-dark'
               onClick={() =>
                 history.push(
                   `/conversation/${uuid}/${getLastQuestion(uuid)}`
