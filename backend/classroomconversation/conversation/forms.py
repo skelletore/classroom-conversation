@@ -5,6 +5,7 @@ from django.core.files import File
 from .models import Conversation, Illustration
 
 from .validation import (
+    has_invalid_image_sources,
     has_one_start_node,
     has_end_node,
     has_illegal_node_shapes,
@@ -86,5 +87,10 @@ class ConversationForm(forms.ModelForm):
 
             if wrong_probability_distribution(file):
                 raise forms.ValidationError(_("validation.doc.probability.sum"))
+
+        is_invalid, errors = has_invalid_image_sources(file)
+        if is_invalid:
+            error_type = _("validation.doc.illustration.invalid_src")
+            raise forms.ValidationError([error_type] + errors)
 
         return document

@@ -3,6 +3,7 @@ from typing import List, Tuple
 
 from .const import END_NODE, CHOICE_NODE, RESPONSE_NODE, ILLUSTRATION_DEFAULT_NODE, ILLUSTRATION_CHOICE_NODE, VALID_SHAPES
 from .helpers import (
+    get_all_illustrations,
     get_tree_root_graph,
     get_all_nodes,
     is_start_node,
@@ -13,6 +14,7 @@ from .helpers import (
     get_node_by_id,
     get_edge_label,
     get_node_label,
+    is_valid_img_src,
 )
 
 
@@ -211,3 +213,22 @@ def wrong_probability_distribution(file):
                 return True
 
     return False
+
+
+def has_invalid_image_sources(file):
+    """
+    Check that all illustration image sources are valid sources
+    """
+    errors = []
+    (tree, root, graph, graphml) = get_tree_root_graph(file)
+
+    illustrations = get_all_illustrations(graph, root)
+    for illustration in illustrations:
+        label = get_node_label(illustration, root)
+        if not is_valid_img_src(label):
+            errors.append(f"Illustration source '{label}' is not a valid image source.")
+
+    if len(errors) > 0:
+        return True, errors
+
+    return False, errors
