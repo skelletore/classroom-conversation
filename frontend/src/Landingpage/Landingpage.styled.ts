@@ -14,7 +14,6 @@ const StyledLandingPage = styled.div`
     bottom: 5%;
     display: flex;
     align-self: center;
-    color: darkgray;
     cursor: pointer;
   }
 `
