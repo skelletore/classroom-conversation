@@ -15,6 +15,10 @@ class ConversationNode(Node):
     illustrations: list[Illustration]
 
 
+class LinkedResponse(ConversationNode):
+    probability: float
+
+
 class Response(ConversationNode):
     links: list[Node]
 
