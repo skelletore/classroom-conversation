@@ -4,14 +4,14 @@ from pydantic import BaseModel
 class Node(BaseModel):
     id: str
     shape: str
+    label: str
 
 
 class Illustration(Node):
-    img: str
+    pass
 
 
 class ConversationNode(Node):
-    label: str
     illustrations: list[Illustration]
 
 
@@ -25,3 +25,7 @@ class Response(ConversationNode):
 
 class Choice(ConversationNode):
     responses: list[Response]
+
+
+class IllustrationChoice(ConversationNode, Illustration):
+    pass
