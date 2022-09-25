@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 19:52+0000\n"
+"POT-Creation-Date: 2022-09-25 13:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,92 +12,73 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: conversation/forms.py:33 conversation/forms.py:49
+#: conversation/forms.py:31 conversation/forms.py:56
 msgid "form.label.name"
 msgstr "Eit namn"
 
-#: conversation/forms.py:34 conversation/forms.py:50
+#: conversation/forms.py:32 conversation/forms.py:57
 msgid "form.label.description"
 msgstr "Beskriving"
 
-#: conversation/forms.py:35
+#: conversation/forms.py:33
 msgid "form.label.image"
 msgstr "Illustrasjon"
 
-#: conversation/forms.py:51
+#: conversation/forms.py:58
 msgid "form.label.document"
 msgstr "Dokument"
 
-#: conversation/forms.py:52
+#: conversation/forms.py:59
 msgid "form.label.uniform_probability"
 msgstr "Uniform sannsyn"
 
-#: conversation/forms.py:63
+#: conversation/forms.py:69
 msgid "validation.doc.all.nodes.connected"
 msgstr "Noen noder mangler kanter - du kan ikke ha løse noder!"
 
-#: conversation/forms.py:68
+#: conversation/forms.py:74
 msgid "validation.doc.broken.conversation"
 msgstr "Alle noder (diamant og firkant) må være koblet til en node (inn, ut)"
 
-#: conversation/forms.py:73
+#: conversation/forms.py:79
 msgid "validation.doc.one.star"
 msgstr "Startnoden må være en stjerne og det kan bare finnes en"
 
-#: conversation/forms.py:77
+#: conversation/forms.py:83
 msgid "validation.doc.end.node"
 msgstr "Du må minst ha en sluttnode (må være en 8-kant)"
 
-#: conversation/forms.py:81
+#: conversation/forms.py:87
 msgid "validation.doc.illegal.shapes"
 msgstr ""
 "Du har ulovlige nodetyper. Du kan bare ha stjerne (start), diamant (elev), "
 "rund firkant (lærer) og 8-kant(slutt)"
 
-#: conversation/forms.py:86
-msgid "validation.doc.diamonds.connections"
-msgstr "Diamanter kan bare kobles til firkanter og åttekanter"
-
-#: conversation/forms.py:90
-msgid "validation.doc.child.nodes.type"
-msgstr ""
-"Barn av node kan bare være av samme type (feks bare diamanter eller bare "
-"firkanter)"
-
-#: conversation/forms.py:93
-msgid "validation.doc.question.has.question"
-msgstr ""
-"Du kan ikke linke spørsmål (firkant) til flere spørsmål (flere firkanter)"
-
-#: conversation/forms.py:96
-msgid "validation.doc.question.needs.answer"
-msgstr "Alle spørsmål (firkant) må ha minst ett svar (diamant)"
-
-#: conversation/forms.py:99
+#: conversation/forms.py:92
 msgid "validation.doc.missing.node.label"
 msgstr "Noen av kantane mangler label"
 
-#: conversation/forms.py:103
+#: conversation/forms.py:97
 msgid "validation.doc.missing.probability"
 msgstr ""
 "Noen av kantene fra lærer node til elevnode mangler sannsynlighet eller har "
 "ikke riktig format (0-1)"
 
-#: conversation/forms.py:106
+#: conversation/forms.py:100
 msgid "validation.doc.probability.sum"
 msgstr "Noen av nodene dine summerer ikke til 100%"
 
-#: conversation/validation.py:29
+#: conversation/forms.py:104
+msgid "validation.doc.illustration.invalid_src"
+msgstr "Ugyldig kilde for bildet"
+
+#: conversation/validation.py:95
 msgid "validation.doc.no.star"
 msgstr "Det finnes ingen startnode (stjerne)"
 
-#: conversation/validation.py:31
+#: conversation/validation.py:97
 msgid "validation.doc.multi.star"
 msgstr "Det finnes flere startnoder (stjerne). Det kan kun eksistere én"
-
-#: conversation/validation.py:71
-msgid "validation.doc.node.connected.to"
-msgstr "har en ugyldig kobling til"
 
 #: templates/403.html:5
 msgid "403"
@@ -162,6 +143,21 @@ msgstr "Filnamn"
 #: templates/upload_document.html:11 templates/upload_illustration.html:11
 msgid "form.label.button"
 msgstr "Last opp"
+
+#~ msgid "validation.doc.diamonds.connections"
+#~ msgstr "Diamanter kan bare kobles til firkanter og åttekanter"
+
+#~ msgid "validation.doc.child.nodes.type"
+#~ msgstr ""
+#~ "Barn av node kan bare være av samme type (feks bare diamanter eller bare "
+#~ "firkanter)"
+
+#~ msgid "validation.doc.question.has.question"
+#~ msgstr ""
+#~ "Du kan ikke linke spørsmål (firkant) til flere spørsmål (flere firkanter)"
+
+#~ msgid "validation.doc.node.connected.to"
+#~ msgstr "har en ugyldig kobling til"
 
 #~ msgid "table.label.start"
 #~ msgstr "Test samtale"
