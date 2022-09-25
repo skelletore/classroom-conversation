@@ -22,12 +22,11 @@ class Conversation(models.Model):
 class Illustration(models.Model):
     id = models.AutoField(primary_key=True)
     uuid = models.CharField(max_length=36, blank=False, unique=True)
-    name = models.CharField(max_length=200, blank=False)
+    name = models.CharField(max_length=48, blank=False, unique=True)
     description = models.TextField(max_length=2000, blank=False)
     image = models.ImageField(upload_to="illustrations/", blank=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-
 
     def __str__(self) -> str:
         return str(self.name)
