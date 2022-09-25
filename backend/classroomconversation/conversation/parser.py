@@ -1,11 +1,12 @@
-from .const import START_NODES, END_NODE, CHOICE_NODE, RESPONSE_NODE
+from .const import ILLUSTRATION_CHOICE_NODE, START_NODES, END_NODE, CHOICE_NODE, RESPONSE_NODE
 
 from .helpers import (
+    add_illustration_prefix_to_internals,
     get_node_label,
     get_node_shape,
     get_tree_root_graph,
     find_linked_conversation_items,
-    find_illustrations,
+    find_linked_illustrations,
 )
 
 
@@ -35,7 +36,7 @@ def graphml_to_json(file, uniform):
 
         out["nodes"][id] = {"id": id, "shape": shape}
 
-        illustrations, _illustration_errors = find_illustrations(edges, root, graph, uniform, illustration_type="any")
+        illustrations, _illustration_errors = find_linked_illustrations(edges, root, graph, uniform, illustration_type="default")
         if _illustration_errors:
             errors += _illustration_errors
         
@@ -50,7 +51,9 @@ def graphml_to_json(file, uniform):
             out["end"] = id
         else:
             links = find_linked_conversation_items(edges, uniform, root, graph)
-            if shape == CHOICE_NODE:
+            if shape == CHOICE_NODE or shape == ILLUSTRATION_CHOICE_NODE:
+                if shape == ILLUSTRATION_CHOICE_NODE:
+                    label = add_illustration_prefix_to_internals(label)
                 out["choices"][id] = {
                     "id": id,
                     "shape": shape,

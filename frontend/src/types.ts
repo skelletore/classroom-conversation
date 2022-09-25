@@ -10,7 +10,7 @@ export type Nodes = {
 export type Illustration = {
   id: string
   shape: string
-  img: string
+  label: string
   links: Node[]
 }
 

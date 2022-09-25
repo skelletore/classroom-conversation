@@ -86,4 +86,7 @@ msgid "form.label.uniform_probability"
 msgstr "Uniform sannsynlighet"
 ```
 
-3. Once you're done editing the messages, compile the files: `docker-compose exec backend python manage.py compilemessages`
+3. Once you're done editing the messages, compile the files:
+```
+docker-compose exec backend python manage.py compilemessages
+```
