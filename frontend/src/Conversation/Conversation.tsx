@@ -28,6 +28,7 @@ const isConversationFinished = (
   if (choice.responses.length < 1) return true
   if (choice.id === end) return true
   if (choice.responses.length === 1 && choice.responses[0].id === end) return true
+  // TODO: Handle diamond as final node
 
   return false
 }

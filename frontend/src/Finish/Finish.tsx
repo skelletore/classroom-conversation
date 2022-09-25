@@ -177,9 +177,9 @@ const Finish = ({ name, intro, choices, responses }: FinishProps) => {
   const [hasSubmitted, setHasSubmitted] =
     useLocalStorage<boolean>('hasSubmitted')
 
-  const teacherImg: string =
+  const teacherAvatar: string =
     getSelectedAvatar() === 1 ? teacherFemale : teacherMale
-  const studentImg: string = getRandomStudents(1)[0]
+  const studentAvatar: string = getRandomStudents(1)[0]
   const finishedAt = new Date().toISOString()
   const pdfFileName = `conversation-${finishedAt}.pdf`
 
@@ -213,8 +213,8 @@ const Finish = ({ name, intro, choices, responses }: FinishProps) => {
               choices={choices}
               dialog={dialogue}
               responses={responses}
-              student={studentImg}
-              teacher={teacherImg}
+              student={studentAvatar}
+              teacher={teacherAvatar}
             />
           }
           fileName={pdfFileName}

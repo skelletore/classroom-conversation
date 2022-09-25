@@ -143,7 +143,13 @@ def is_end_node(node, root) -> bool:
 
 def is_choice_node(node, root) -> bool:
     node_shape = get_node_shape(node, root)
-    return CHOICE_NODE in node_shape if node_shape else False
+    if not node_shape:
+        return False
+    if CHOICE_NODE in node_shape:
+        return True
+    if ILLUSTRATION_CHOICE_NODE in node_shape:
+        return True
+    return False
 
 
 def is_response_node(node, root) -> bool:
@@ -162,7 +168,7 @@ def is_illustration_choice_node(node, root) -> bool:
 
 
 def is_conversation_item_node(node, root) -> bool:
-    if is_choice_node(node, root) or is_response_node(node, root):
+    if is_choice_node(node, root) or is_response_node(node, root) or is_illustration_choice_node(node, root):
         return True
     return False
 
@@ -236,30 +242,38 @@ def is_valid_img_src(src: str) -> bool:
     return is_permitted()
 
 
-def find_illustrations(edges, root, graph, uniform, illustration_type = "any") -> Tuple[list[Illustration], list[str]]:
+def add_illustration_prefix_to_internals(label: str) -> str:
+    # prefix internals with /illustration/
+    if re.match(r"^[a-zA-Z0-9-_]{1,}$", label):
+        label = f"/illustration/{label}"
+
+    return label
+
+
+def find_linked_illustrations(edges, root, graph, uniform, illustration_type = "any") -> Tuple[list[Illustration], list[str]]:
     if (illustration_type and illustration_type not in ["any", "default", "choice"]) or illustration_type == None:
         illustration_type = "any"
     errors: list[str] = []
     illustrations: list[Illustration] = []
     for edge in edges:
-        target_id = edge.get("target")
-        node = get_node_by_id(target_id, graph)
+        try:
+            target_id = edge.get("target")
+            node = get_node_by_id(target_id, graph)
 
-        links = find_linked_conversation_items(edges, uniform, root, graph)
+            if (
+                illustration_type == "any" and is_illustration_node(node, root)
+            ) or (
+                illustration_type == "default" and is_illustration_default_node(node, root)
+            ) or (
+                illustration_type == "choice" and is_illustration_choice_node(node, root)
+            ):
+                label = get_node_label(node, root)
+                shape = get_node_shape(node, root)
+                links = find_linked_conversation_items(edges, uniform, root, graph)
 
-        if (
-            illustration_type == "any" and is_illustration_node(node, root)
-        ) or (
-            illustration_type == "default" and is_illustration_default_node(node, root)
-        ) or (
-            illustration_type == "choice" and is_illustration_choice_node(node, root)
-        ):
-            label = get_node_label(node, root)
-            shape = get_node_shape(node, root)
-
-            # prefix internals with /illustration/
-            if re.match(r"^[a-zA-Z0-9-_]{1,}$", label):
-                label = f"/illustration/{label}"
-            illustrations.append({"id": target_id, "img": label, "shape": shape, "links": links})                
+                label = add_illustration_prefix_to_internals(label)
+                illustrations.append({"id": target_id, "label": label, "shape": shape, "links": links})
+        except:
+            errors.append(f"Failed to parse illustration '{label}' ({node.id})")
     
     return illustrations, errors
