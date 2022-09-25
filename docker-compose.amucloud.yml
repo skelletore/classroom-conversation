@@ -2,15 +2,18 @@ version: "3.8"
 
 services:
   proxy:
-    image: classroom-conversation/nginx:latest
+    image: classroom-conversation/nginx:beta
     build:
       context: ./nginx
       target: amucloud-prod
     volumes:
-      - /opt/webabble/ssl/webabble.0xmo.com.crt:/etc/nginx/ssl/webabble.0xmo.com.crt:ro
-      - /opt/webabble/ssl/webabble.0xmo.com.key:/etc/nginx/ssl/webabble.0xmo.com.key:ro
-      - /opt/webabble/ssl/dhparam.pem:/etc/nginx/dhparam.pem:ro
+      - /opt/webabble-beta/ssl/beta.webabble.0xmo.com.crt:/etc/nginx/ssl/beta.webabble.0xmo.com.crt:ro
+      - /opt/webabble-beta/ssl/beta.webabble.0xmo.com.key:/etc/nginx/ssl/beta.webabble.0xmo.com.key:ro
+      - /opt/webabble-beta/ssl/beta-dhparam.pem:/etc/nginx/dhparam.pem:ro
   backend:
+    image: classroom-conversation/backend:beta
     volumes:
-      - /opt/webabble/static:/app/staticfiles
-      - /opt/webabble/media:/app/mediafiles
+      - /opt/webabble-beta/static:/app/staticfiles
+      - /opt/webabble-beta/media:/app/mediafiles
+  frontend:
+    image: classroom-conversation/frontend:beta
