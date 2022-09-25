@@ -1,6 +1,8 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from django.core.files import File
+from urllib.parse import quote
+import re
 
 from .models import Conversation, Illustration
 
@@ -30,6 +32,15 @@ class IllustrationForm(forms.ModelForm):
             "description": _("form.label.description"),
             "image": _("form.label.image"),
         }
+
+    def clean_name(self):
+        name = self.cleaned_data.get("name")
+        pattern = re.compile('[^a-zA-Z_-]')
+        name = pattern.sub('', name)
+        name = quote(name)
+        name = name.strip()
+
+        return name
 
 
 class ConversationForm(forms.ModelForm):
