@@ -35,7 +35,7 @@ class IllustrationForm(forms.ModelForm):
 
     def clean_name(self):
         name = self.cleaned_data.get("name")
-        pattern = re.compile('[^a-zA-Z_-]')
+        pattern = re.compile('[^a-zA-Z0-9_-]')
         name = pattern.sub('', name)
         name = quote(name)
         name = name.strip()
