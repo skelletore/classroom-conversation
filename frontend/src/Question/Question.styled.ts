@@ -29,7 +29,7 @@ export const StyledConversation = styled.div`
     grid-template-areas:
       "question answers";
     grid-area: 1 / 1 / 2 / 2;
-    min-height: 300px;
+    min-height: 200px;
     max-height: 300px;
 
     h2 {
@@ -61,7 +61,9 @@ export const StyledConversation = styled.div`
     grid-area: 2 / 1 / 3 / 2;
 
     .illustrationContainer {
-      height: ${calculateResponsiveSize(200, 350)};
+      min-height: 150px;
+      padding-top: 2%;
+      padding-bottom: 2%;
       border: 3px solid rgba(0, 0, 0, .75);
       box-shadow: 2px 2px rgba(0, 0, 0, .5);
       background-image: url(${blackboard});
