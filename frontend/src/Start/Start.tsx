@@ -3,6 +3,7 @@ import { useParams, useHistory } from 'react-router-dom'
 
 import { useFetchAndStoreConversation, useLocalStorage } from '../hooks'
 import {
+  removeConversation,
   removeRecordedConversation,
   hasDialogRecorded,
   getLastQuestion,
@@ -71,6 +72,7 @@ const Start = () => {
           <button
             className='btn-dark'
             onClick={() => {
+              removeConversation(uuid)
               removeRecordedConversation()
               setHasSubmitted(false)
               history.push(
