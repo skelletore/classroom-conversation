@@ -151,6 +151,14 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
         </div>
       </div>
       <div className='media'>
+        <div className='teacher'>
+          {avatar === 1 && (
+            <img className="teacher" src={teacherWoman} alt="Female avatar" />
+          )}
+          {avatar === 2 && (
+            <img className="teacher" src={teacherMan} alt="Male avatar" />
+          )}
+        </div>
         <div className='illustrationContainer'>
           {illustration && (
             <img
@@ -158,16 +166,6 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
               src={illustration.label}
               alt={illustration.label || 'Illustration'}
             />
-          )}
-        </div>
-      </div>
-      <div className='avatars'>
-        <div className='teacher'>
-          {avatar === 1 && (
-            <img className="teacher" src={teacherWoman} alt="Female avatar" />
-          )}
-          {avatar === 2 && (
-            <img className="teacher" src={teacherMan} alt="Male avatar" />
           )}
         </div>
         <div className='students'>

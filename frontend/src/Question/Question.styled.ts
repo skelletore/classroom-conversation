@@ -52,16 +52,23 @@ export const StyledConversation = styled.div`
 
   .media {
     display: grid;
-    grid-template-columns: 20% 60% 20%;
+    grid-template-columns: 20% 50% 30%;
     grid-template-rows: 100%;
     gap: 0px 0px;
     grid-auto-flow: row;
     grid-template-areas:
-      ". illustrationContainer .";
+      "teacher illustrationContainer students";
     grid-area: 2 / 1 / 3 / 2;
 
+    .teacher {
+      align-self: flex-end;
+      width: ${calculateResponsiveSize(75, 200)};
+      grid-area: teacher;
+      margin-left: 5%;
+    }
+
     .illustrationContainer {
-      min-height: 150px;
+      min-height: 200px;
       padding-top: 2%;
       padding-bottom: 2%;
       border: 3px solid rgba(0, 0, 0, .75);
@@ -85,32 +92,11 @@ export const StyledConversation = styled.div`
         max-height: -webkit-fill-available;
       }
     }
-  }
-
-  .avatars {
-    position: fixed;
-    bottom: 175px;
-    width: 100%;
-    max-height: 300px;
-    display: grid;
-    grid-template-columns: 40% 20% 40%;
-    grid-template-rows: 100%;
-    gap: 0px 0px;
-    grid-auto-flow: row;
-    grid-template-areas:
-      "teacher . students";
-    grid-area: 2 / 1 / 3 / 2;
-
-    .teacher {
-      width: ${calculateResponsiveSize(75, 200)};
-      grid-area: teacher;
-      margin-left: 5%;
-    }
 
     .students {
-      position: absolute;
-      right: 0px;
-      bottom: 0px;
+      align-self: flex-end;
+      margin-left: auto;
+      margin-right: 0px;
       display: flex;
       flex-direction: row;
       grid-area: students;
@@ -123,7 +109,6 @@ export const StyledConversation = styled.div`
 
   .choices {
     display: grid;
-    grid-template-columns: 50% 50%;
     grid-template-rows: 100%;
     gap: 0px 0px;
     grid-template-areas: 
@@ -143,9 +128,6 @@ export const StyledConversation = styled.div`
     justify-content: space-around;
 
     .questions {
-      margin-left: 5%;
-      position: absolute;
-      left: 0px;
       grid-area: questions;
       
       button {
@@ -153,14 +135,11 @@ export const StyledConversation = styled.div`
       }
     }
     .illustrations {
-      margin-right: 5%;
-      position: absolute;
-      right: 0px;
       grid-area: illustrations;
 
       .illustration {
         margin: 0 10px;
-        width: ${calculateResponsiveSize(100, 220)};;
+        width: ${calculateResponsiveSize(200, 300)};;
       }
     }
   }
