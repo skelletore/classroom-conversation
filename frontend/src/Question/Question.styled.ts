@@ -68,7 +68,7 @@ export const StyledConversation = styled.div`
     }
 
     .illustrationContainer {
-      min-height: 200px;
+      height: 300px;
       padding-top: 2%;
       padding-bottom: 2%;
       border: 3px solid rgba(0, 0, 0, .75);
