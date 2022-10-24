@@ -22,4 +22,6 @@ urlpatterns = [
     path("upload/illustration", views.upload_illustration, name="upload_illustration"),
     path("illustration/list", views.illustration_list, name="illustration_list"),
     path("illustration/<image_name>", views.get_illustration_by_name, name="get_illustration_by_name"),
+    path("metrics", views.metrics_overview, name="metrics_overview"),
+    path("metrics/<conversation>", views.metrics_view, name="metrics_view"),
 ]

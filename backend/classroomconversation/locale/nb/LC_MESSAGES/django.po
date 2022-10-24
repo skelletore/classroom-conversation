@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-25 13:10+0000\n"
+"POT-Creation-Date: 2022-10-25 15:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,6 +72,14 @@ msgstr "Noen av nodene dine summerer ikke til 100%"
 msgid "validation.doc.illustration.invalid_src"
 msgstr "Ugyldig kilde for bildet"
 
+#: conversation/helpers.py:294
+msgid "heatmap.label.number"
+msgstr "Valg"
+
+#: conversation/helpers.py:294 conversation/helpers.py:296
+msgid "heatmap.label.frequency"
+msgstr "Frekvens"
+
 #: conversation/validation.py:95
 msgid "validation.doc.no.star"
 msgstr "Det finnes ingen startnode (stjerne)"
@@ -104,15 +112,20 @@ msgstr "Alle illustrasjoner"
 msgid "navigation.upload_illustration"
 msgstr "Last opp illustrasjon"
 
-#: templates/base.html:95
+#: templates/base.html:83
+msgid "navigation.view_metrics"
+msgstr "Vis statistikk"
+
+#: templates/base.html:100
 msgid "form.label.button.language"
 msgstr "Bytt  "
 
-#: templates/base.html:100
+#: templates/base.html:105
 msgid "profile.hello"
 msgstr "Hei, "
 
 #: templates/document_list.html:9 templates/illustration_list.html:9
+#: templates/metrics_view.html:11
 msgid "table.label.date"
 msgstr "Dato"
 
@@ -140,6 +153,26 @@ msgstr "Kopier"
 msgid "table.label.filename"
 msgstr "Filnavn"
 
+#: templates/metrics_overview.html:7
+msgid "metrics.conversations"
+msgstr "Alle samtaler"
+
+#: templates/metrics_overview.html:12
+msgid "table.label.conversation"
+msgstr "Samtale"
+
+#: templates/metrics_overview.html:20
+msgid "table.action.show_metrics"
+msgstr "Vis"
+
+#: templates/metrics_view.html:7
+msgid "metrics.responses_for"
+msgstr "Responser for"
+
+#: templates/metrics_view.html:13
+msgid "table.label.choice"
+msgstr "Valg"
+
 #: templates/upload_document.html:11 templates/upload_illustration.html:11
 msgid "form.label.button"
 msgstr "Last opp"
@@ -161,6 +194,3 @@ msgstr "Last opp"
 
 #~ msgid "table.label.start"
 #~ msgstr "Test samtale"
-
-#~ msgid "table.label.copy"
-#~ msgstr "Kopier link"

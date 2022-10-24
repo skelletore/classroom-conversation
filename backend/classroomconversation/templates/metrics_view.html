@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+<h1>{% trans "metrics.responses_for" %} {{ completed_conversations.0.conversation.name }}</h1>
+
+<table class="uploads table">
+  <tr>
+    <th>{% trans "table.label.date" %}</th>
+    {% for choice in completed_conversations.0.choices %}
+    <th>{% trans "table.label.choice" %} {{ forloop.counter }}</th>
+    {% endfor %}
+  </tr>
+  {% for completed_conversation in completed_conversations %}
+  <tr>
+    <td>{{ completed_conversation.created|date:"d.m.Y" }} {{ completed_conversation.created|time:"H:i" }}</td>
+    {% for choice in completed_conversation.choices %}
+    <td>{{ choice }}</td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+</table>
+
+{% autoescape off %}
+{{ heatmap }}
+{% endautoescape %}
+{% endblock %}

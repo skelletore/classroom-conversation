@@ -77,6 +77,11 @@
           href="/upload/illustration"
           >{% trans "navigation.upload_illustration" %}</a
         >
+        <a
+          class="nav-item nav-link {% if request.get_full_path == '/metrics' %}active{% endif %}"
+          href="/metrics"
+          >{% trans "navigation.view_metrics" %}</a
+        >
       </div>
 
       <form class="change-language" action="{% url 'set_language' %}" method="post">

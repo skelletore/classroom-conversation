@@ -2,6 +2,8 @@ from typing import Tuple
 import xml.etree.ElementTree as ElementTree
 from urllib.parse import urlparse
 import re
+from django.utils.translation import gettext_lazy as _
+import plotly.express as px
 
 from .const import START_NODE, END_NODE, CHOICE_NODE, RESPONSE_NODE, ILLUSTRATION_DEFAULT_NODE, ILLUSTRATION_CHOICE_NODE
 from .conversation_models import Illustration, LinkedConversationItem, Node
@@ -277,3 +279,21 @@ def find_linked_illustrations(edges, root, graph, uniform, illustration_type = "
             errors.append(f"Failed to parse illustration '{label}' ({node.id})")
     
     return illustrations, errors
+
+
+def generate_heatmap_html(completed_conversations) -> str:
+    if len(completed_conversations) <= 0:
+        return ""
+    choices = {}
+    for completed_conversation in completed_conversations:
+        for choice in completed_conversation.choices:
+            if choice not in choices:
+                choices[choice] = 1
+                continue
+            choices[choice] += 1
+    labels={"x": str(_("heatmap.label.number")), "color": str(_("heatmap.label.frequency"))}
+    labels_x = list(choices.keys())
+    labels_y = [str(_("heatmap.label.frequency"))]
+    data = [list(choices.values())]
+    fig = px.imshow(data, labels=labels, x=labels_x, y=labels_y, text_auto=True)
+    return fig.to_html(full_html=True, default_height="350px")

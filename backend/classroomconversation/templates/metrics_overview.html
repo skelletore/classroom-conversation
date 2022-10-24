@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+<h1>{% trans "metrics.conversations" %}</h1>
+
+<table class="uploads table">
+  <tr>
+    <th>ID</th>
+    <th>{% trans "table.label.conversation" %}</th>
+    <th></th>
+  </tr>
+  {% for conversation in conversations %}
+  <tr>
+    <td>{{ conversation.uuid }}</td>
+    <td>{{ conversation.name }}</td>
+    <td>
+      <a href="/metrics/{{ conversation.uuid }}">{% trans "navigation.view_metrics" %}</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

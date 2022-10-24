@@ -1,4 +1,3 @@
-from typing import List
 import uuid
 
 from rest_framework.permissions import AllowAny, IsAdminUser
@@ -14,6 +13,7 @@ from .forms import ConversationForm, IllustrationForm
 from .models import Conversation, Illustration, CompletedConversation
 from .serializers import ConversationSerializer, IllustrationSerializer, CompletedConversationSerializer
 from .parser import graphml_to_json
+from .helpers import generate_heatmap_html
 
 LOGIN_URL = "/account/login/"
 
@@ -113,3 +113,18 @@ def get_illustration_by_name(request, image_name):
             return FileResponse(image)
     
     return HttpResponseNotFound()
+
+
+@login_required(login_url=LOGIN_URL)
+@permission_required("user.is_staff", raise_exception=True)
+def metrics_overview(request):
+    conversations = Conversation.objects.all().order_by("-created")
+    return render(request, "metrics_overview.html", {"conversations": conversations})
+
+
+@login_required(login_url=LOGIN_URL)
+@permission_required("user.is_staff", raise_exception=True)
+def metrics_view(request, conversation):
+    completed_conversations = CompletedConversation.objects.filter(conversation=conversation).order_by("-created")
+    heatmap = generate_heatmap_html(completed_conversations)
+    return render(request, "metrics_view.html", {"completed_conversations": completed_conversations, "heatmap": heatmap})
