@@ -29,6 +29,7 @@ import {
   Image,
 } from '@react-pdf/renderer'
 import { useLocalStorage } from '../hooks'
+import { NODE_SHAPE } from '../const'
 
 Font.register({
   family: 'opensans',
@@ -100,6 +101,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 10,
   },
+  illustration: {
+    width: 300,
+  }
 })
 
 type PDFProps = {
@@ -150,10 +154,14 @@ const PDFDocument = ({
 
         return (
           <View key={i} style={styles.section}>
-            <Text style={styles.choice}>
-              {i < dialog.length - 1 ? `Lærer ${i + 1}: ` : `Avslutning: `}
-              {choice.label}
-            </Text>
+            {choice.shape === NODE_SHAPE.ILLUSTRATION_CHOICE ? (
+              <Image style={styles.illustration} src={choice.label} />
+            ) : (
+              <Text style={styles.choice}>
+                {i < dialog.length - 1 ? `Lærer ${i + 1}: ` : `Avslutning: `}
+                {choice.label}
+              </Text>
+            )}
             {choice && response && i < dialog.length - 1 && (
               <Text style={styles.response}>
                 Elev: {response ? response.label : ''}
