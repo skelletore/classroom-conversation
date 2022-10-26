@@ -25,6 +25,3 @@ COPY sites-available/dev.conf /etc/nginx/sites-enabled/classroom-conversation.co
 
 FROM base AS production
 COPY sites-available/prod.conf /etc/nginx/sites-enabled/classroom-conversation.conf
-
-FROM base AS amucloud-prod
-COPY sites-available/prod-amucloud.conf /etc/nginx/sites-enabled/classroom-conversation.conf
