@@ -3,8 +3,8 @@ FROM nginx:alpine AS base
 RUN apk upgrade --update-cache
 
 # Copy configs
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY config/ /etc/nginx/config/
+COPY --chown=nginx:nginx nginx.conf /etc/nginx/nginx.conf
+COPY --chown=nginx:nginx config/ /etc/nginx/config/
 
 # Ensure log directory exists, set permissions
 RUN mkdir -p /var/log/nginx && \
@@ -21,7 +21,7 @@ RUN touch /var/run/nginx.pid && \
 USER nginx
 
 FROM base AS development
-COPY sites-available/dev.conf /etc/nginx/sites-enabled/classroom-conversation.conf
+COPY --chown=nginx:nginx sites-available/dev.conf /etc/nginx/sites-enabled/classroom-conversation.conf
 
 FROM base AS production
-COPY sites-available/prod.conf /etc/nginx/sites-enabled/classroom-conversation.conf
+COPY --chown=nginx:nginx sites-available/prod.conf /etc/nginx/sites-enabled/classroom-conversation.conf

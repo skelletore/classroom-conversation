@@ -1,6 +1,7 @@
 FROM node:16-alpine AS base
 
 ARG APP_ROOT=/app
+ARG RUN_AS_USER="1000"
 
 WORKDIR $APP_ROOT
 COPY package.json craco.config.js ./
@@ -19,4 +20,8 @@ EXPOSE 3000
 CMD ["serve", "-s", "build", "-l", "3000"]
 
 # Run as non-root in production
-USER 1000
+RUN chown -R $RUN_AS_USER:$RUN_AS_USER $APP_ROOT
+# Read-only source code in production
+RUN chmod -R 555 "$APP_ROOT/src"
+
+USER $RUN_AS_USER

@@ -6,7 +6,3 @@ services:
       - /opt/webabble/certs/iluweb.it.ntnu.no.crt:/etc/nginx/ssl/iluweb.it.ntnu.no.crt:ro
       - /opt/webabble/certs/iluweb.it.ntnu.no.key:/etc/nginx/ssl/private/iluweb.it.ntnu.no.key:ro
       - /opt/webabble/certs/dhparam.pem:/etc/nginx/dhparam.pem:ro
-  backend:
-    volumes:
-      - /opt/webabble/static:/app/staticfiles
-      - /opt/webabble/media:/app/mediafiles

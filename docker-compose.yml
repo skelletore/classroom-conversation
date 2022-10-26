@@ -30,6 +30,9 @@ services:
       - db
     links:
       - db
+    volumes:
+      - static_vol:/app/staticfiles
+      - media_vol:/app/mediafiles
   frontend:
     image: classroom-conversation/frontend:prod
     build:
@@ -40,11 +43,14 @@ services:
       - backend
   db:
     image: postgres
+    container_name: db
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - db_vol:/var/lib/postgresql/data
     env_file:
       - db.env
     environment:
       - POSTGRES_HOST=db
 volumes:
-  postgres_data:
+  db_vol:
+  static_vol:
+  media_vol:
