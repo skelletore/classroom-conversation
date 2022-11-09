@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ElementTree
 from urllib.parse import urlparse
 import re
 from django.utils.translation import gettext_lazy as _
-import plotly.express as px
+import plotly.graph_objects as go
 
 from .const import START_NODE, END_NODE, CHOICE_NODE, RESPONSE_NODE, ILLUSTRATION_DEFAULT_NODE, ILLUSTRATION_CHOICE_NODE
 from .conversation_models import Illustration, LinkedConversationItem, Node
@@ -286,14 +286,34 @@ def generate_heatmap_html(completed_conversations) -> str:
         return ""
     choices = {}
     for completed_conversation in completed_conversations:
-        for choice in completed_conversation.choices:
-            if choice not in choices:
-                choices[choice] = 1
+        for choice_n, choice_details in completed_conversation.choices.items():
+            choice = choice_details.get("choice")
+            if choice_n not in choices:
+                choices[choice_n] = {"text": choice, "count": 1}
                 continue
-            choices[choice] += 1
-    labels={"x": str(_("heatmap.label.number")), "color": str(_("heatmap.label.frequency"))}
+            choices[choice_n]["count"] += 1
+    # ID of choices (n9, ...)
     labels_x = list(choices.keys())
     labels_y = [str(_("heatmap.label.frequency"))]
-    data = [list(choices.values())]
-    fig = px.imshow(data, labels=labels, x=labels_x, y=labels_y, text_auto=True)
+    # Frequency per choice
+    data = [[choice.get("count") for choice in list(choices.values())]]
+    # Text of choices
+    text = [[choice.get("text") for choice in list(choices.values())]]
+
+    # Text displayed on hover
+    hovertemplate="%s: %%{x}<br>%s: %%{z}<br><extra>%%{text}</extra>" % (
+        str(_('heatmap.label.number')),
+        str(_('heatmap.label.frequency')),
+    )
+    fig = go.Figure(
+        data=go.Heatmap(
+        z=data,
+        x=labels_x,
+        y=labels_y,
+        text=text,
+        texttemplate="%{z}",
+        hovertemplate=hovertemplate,
+        colorbar=dict(title=dict(side="right", text=str(_('heatmap.label.frequency')))),
+    ))
+
     return fig.to_html(full_html=True, default_height="350px")
