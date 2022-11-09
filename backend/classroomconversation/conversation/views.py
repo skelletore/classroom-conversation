@@ -6,6 +6,7 @@ from rest_framework import viewsets, mixins
 from django.shortcuts import render, redirect
 from django.core.files import File
 from django.http import FileResponse, HttpResponseNotFound
+from django.utils.translation import gettext_lazy as _
 
 from django.contrib.auth.decorators import login_required, permission_required
 
@@ -127,4 +128,8 @@ def metrics_overview(request):
 def metrics_view(request, conversation):
     completed_conversations = CompletedConversation.objects.filter(conversation=conversation).order_by("-created")
     heatmap = generate_heatmap_html(completed_conversations)
-    return render(request, "metrics_view.html", {"completed_conversations": completed_conversations, "heatmap": heatmap})
+    table_headers = [_("table.label.date")]
+    # find the longest conversation
+    max_len = max([len(conversation.choices) for conversation in completed_conversations])
+    table_headers.extend([f"{_('table.label.choice')} {i + 1}" for i in range(0, max_len)])
+    return render(request, "metrics_view.html", {"completed_conversations": completed_conversations, "table_headers": table_headers, "heatmap": heatmap})

@@ -8,9 +8,8 @@
 
 <table class="uploads table">
   <tr>
-    <th>{% trans "table.label.date" %}</th>
-    {% for choice in completed_conversations.0.choices %}
-    <th>{% trans "table.label.choice" %} {{ forloop.counter }}</th>
+    {% for header in table_headers %}
+    <th>{{ header }}</th>
     {% endfor %}
   </tr>
   {% for completed_conversation in completed_conversations %}
