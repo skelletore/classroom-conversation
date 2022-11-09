@@ -30,7 +30,7 @@ const Pause = ({ uuid, id, next, current }: PauseProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ delay: 1 }}
+        transition={{ delay: 0 }}
         key="student"
         className="student"
       >
@@ -46,7 +46,7 @@ const Pause = ({ uuid, id, next, current }: PauseProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ delay: 2 }}
+            transition={{ delay: 0 }}
             key="alternatives"
             onClick={() =>
               history.push(`/conversation/${uuid}/${id}`)
