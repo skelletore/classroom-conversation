@@ -130,18 +130,18 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ delay: 1 }}
+            transition={{ delay: 0 }}
             key={`student_${id ?? 0}`}
             className="student"
           >
             {randomResponse?.label}
           </motion.h2>
-          {linkedResponses.map((linkedResponse, count) =>
+          {linkedResponses.map((linkedResponse) =>
             <motion.h2
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ delay: count + 2 }}
+              transition={{ delay: 0 }}
               key={`student_${linkedResponse.id}`}
               className="student linkedResponse"
             >
@@ -184,7 +184,7 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ delay: 2 + 0.5 * key }}
+                  transition={{ delay: 0 }}
                   key={`choice_${key}`}
                   onClick={() =>
                     history.push(`/conversation/${uuid}/${choice.id}`)
@@ -207,7 +207,7 @@ const QuestionComponent = ({ graph, uuid, id }: Props) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ delay: 2 + 0.5 * key }}
+              transition={{ delay: 0 }}
 
               onClick={(() => {
                 history.push(`/conversation/${uuid}/${illustrationChoice.id}`)
