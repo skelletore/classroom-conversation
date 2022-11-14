@@ -8,6 +8,8 @@ The app consist of a Django app for admins also serving as an API, as well as a 
 - `/illustrations/add` --> Upload new illustration (image)
 - `/illustrations` --> Look at all uploaded illustrations
 - `/illustration/<image_name>` --> View an illustration by name
+- `/metrics` --> View the metrics overview
+- `/metrics/<uuid>` --> View the recorded responses of a conversation
 - `/`--> The landing page of the react app
 - `/browse` --> Browse the conversations to start
 - `/conversation/<uuid>/start` --> Start conversation (the main entry to the app)
