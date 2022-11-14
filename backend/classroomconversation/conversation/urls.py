@@ -24,5 +24,5 @@ urlpatterns = [
     path("illustration/<image_name>", views.get_illustration_by_name, name="illustrations_get_by_name"),
     path("illustrations/add", views.add_illustration, name="illustrations_add"),
     path("metrics", views.metrics_overview, name="metrics_overview"),
-    path("metrics/<conversation>", views.metrics_view, name="metrics_view"),
+    path("metrics/<uuid>", views.metrics_view, name="metrics_view"),
 ]

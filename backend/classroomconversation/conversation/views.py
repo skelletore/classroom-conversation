@@ -146,11 +146,19 @@ def metrics_overview(request):
 
 @login_required(login_url=LOGIN_URL)
 @permission_required("user.is_staff", raise_exception=True)
-def metrics_view(request, conversation):
-    completed_conversations = CompletedConversation.objects.filter(conversation=conversation).order_by("-created")
-    heatmap = generate_heatmap_html(completed_conversations)
-    table_headers = [_("table.label.date")]
-    # find the longest conversation
-    max_len = max([len(conversation.choices) for conversation in completed_conversations])
-    table_headers.extend([f"{_('table.label.choice')} {i + 1}" for i in range(0, max_len)])
-    return render(request, "metrics_view.html", {"completed_conversations": completed_conversations, "table_headers": table_headers, "heatmap": heatmap})
+def metrics_view(request, uuid):
+    if request.method == "GET":
+        conversation = Conversation.objects.filter(uuid=uuid)
+        if conversation.count() >= 1:
+            conversation_name = conversation.first().name
+            completed_conversations = CompletedConversation.objects.filter(conversation=uuid).order_by("-created")
+            heatmap = generate_heatmap_html(completed_conversations)
+            table_headers = [_("table.label.date")]
+            # find the longest conversation
+            if completed_conversations.count() >= 1:
+                max_len = max([len(conversation.choices) for conversation in completed_conversations])
+                table_headers.extend([f"{_('table.label.choice')} {i + 1}" for i in range(0, max_len)])
+
+            return render(request, "metrics_view.html", {"conversation_name": conversation_name, "completed_conversations": completed_conversations, "table_headers": table_headers, "heatmap": heatmap})
+    
+    return HttpResponseNotFound()
