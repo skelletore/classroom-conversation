@@ -87,6 +87,14 @@ def get_all_conversations(request):
 
 @login_required(login_url=LOGIN_URL)
 @permission_required("user.is_staff", raise_exception=True)
+def get_conversation_by_id(request, uuid):
+    conversation = Conversation.objects.filter(uuid=uuid)
+    if conversation.count() == 1:
+        document = conversation.first().document
+        return FileResponse(document)
+
+    return HttpResponseNotFound()
+
 
 @login_required(login_url=LOGIN_URL)
 @permission_required("user.is_staff", raise_exception=True)
