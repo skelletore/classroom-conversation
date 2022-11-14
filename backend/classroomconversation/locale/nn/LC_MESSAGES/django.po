@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-25 15:38+0000\n"
+"POT-Creation-Date: 2022-11-14 19:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,7 +112,7 @@ msgstr "Alle illustrasjoner"
 msgid "navigation.upload_illustration"
 msgstr "Last opp illustrasjon"
 
-#: templates/base.html:83
+#: templates/base.html:83 templates/metrics_overview.html:20
 msgid "navigation.view_metrics"
 msgstr "Vis statistikk"
 
@@ -124,28 +124,28 @@ msgstr "Bytt"
 msgid "profile.hello"
 msgstr "Hei, "
 
-#: templates/document_list.html:9 templates/illustration_list.html:9
+#: templates/conversation_list.html:9 templates/illustration_list.html:9
 #: templates/metrics_view.html:11
 msgid "table.label.date"
 msgstr "Dato"
 
-#: templates/document_list.html:10 templates/illustration_list.html:10
+#: templates/conversation_list.html:10 templates/illustration_list.html:10
 msgid "table.label.name"
 msgstr "Namn"
 
-#: templates/document_list.html:11 templates/illustration_list.html:12
+#: templates/conversation_list.html:11 templates/illustration_list.html:12
 msgid "table.label.description"
 msgstr "Beskriving"
 
-#: templates/document_list.html:21 templates/illustration_list.html:23
+#: templates/conversation_list.html:21 templates/illustration_list.html:23
 msgid "table.action.download"
 msgstr "Fil"
 
-#: templates/document_list.html:25
+#: templates/conversation_list.html:25
 msgid "table.action.start"
 msgstr "Test"
 
-#: templates/document_list.html:28 templates/illustration_list.html:25
+#: templates/conversation_list.html:28 templates/illustration_list.html:25
 msgid "table.action.copy"
 msgstr "Kopier"
 
@@ -161,10 +161,6 @@ msgstr "Samtalar"
 msgid "table.label.conversation"
 msgstr "Samtale"
 
-#: templates/metrics_overview.html:20
-msgid "table.action.show_metrics"
-msgstr "Vis statistikk"
-
 #: templates/metrics_view.html:7
 msgid "metrics.responses_for"
 msgstr "Responsar for"
@@ -173,9 +169,12 @@ msgstr "Responsar for"
 msgid "table.label.choice"
 msgstr "Val"
 
-#: templates/upload_document.html:11 templates/upload_illustration.html:11
+#: templates/upload_conversation.html:11 templates/upload_illustration.html:11
 msgid "form.label.button"
 msgstr "Last opp"
+
+#~ msgid "table.action.show_metrics"
+#~ msgstr "Vis statistikk"
 
 #~ msgid "validation.doc.diamonds.connections"
 #~ msgstr "Diamanter kan bare kobles til firkanter og åttekanter"

@@ -69,7 +69,7 @@ Start application to check that everything is running:
 python manage.py runserver
 ```
 
-Hit `localhost:8000/upload` to check that everything is running
+Hit `localhost:8000/conversations` to check that everything is running
 
 ## RUN PROJECT
 
@@ -95,4 +95,4 @@ Start app
 python manage.py runserver
 ```
 
-Hit `localhost:8000/upload` and get to work!
+Hit `localhost:8000/conversations` and get to work!

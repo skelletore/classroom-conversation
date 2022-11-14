@@ -22,7 +22,7 @@
     <td>{{ illustration.description}}</td>
     <td><a href="/illustration/{{ illustration.name }}">{% trans "table.action.download" %}</a></td>
     <td>
-      <button id="copy-link" onclick="copyLinkToClipboard('{{ illustration.image.url }}', false);">{% trans "table.action.copy" %}</button>
+      <button id="copy-link" onclick="copyLinkToClipboard('{{ illustration.name }}', false);">{% trans "table.action.copy" %}</button>
     </td>
   </tr>
   {% endfor %}

@@ -46,7 +46,7 @@ For å legge inn en illustrasjon som skal vises på tavla, har du to muligheter:
 #### Opplastning av bilde direkte i applikasjonen
 
 For å laste opp et bilde i applikasjonen, gjør følgende:
-1. Naviger til `/upload/illustration` (f.eks. http://iluweb01.it.ntnu.no/upload/illustration)
+1. Naviger til `/illustrations/add` (f.eks. http://iluweb.it.ntnu.no/illustrations/add)
 2. Gi bildet et navn:
   - Navnet må være unikt, maksimalt 48 tegn, og kun bestå av alfanumeriske tegn samt `_` og `-`
   - Dette navnet brukes i grafen når du skal referere til et internt bilde

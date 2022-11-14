@@ -148,7 +148,7 @@ MEDIA_URL = "/mediafiles/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
 
 LOGIN_URL = "/account/login/"
-LOGIN_REDIRECT_URL = "/upload"
+LOGIN_REDIRECT_URL = "/conversations"
 LOGOUT_REDIRECT_URL = None
 
 if os.getenv("USE_SSL", "False") == "True":

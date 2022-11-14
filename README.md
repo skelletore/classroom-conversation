@@ -2,10 +2,11 @@
 The app consist of a Django app for admins also serving as an API, as well as a React app (frontend, web). The traffic to the API and the Web UI is handled by `nginx`, serving as a reverse proxy.
 
 - `/admin`--> The admin panel to handle users and data
-- `/upload` --> Upload new conversation (.graphml)
-- `/upload/list` --> Look at all uploaded conversations
-- `/upload/illustration` --> Upload new illustration (image)
-- `/illustration/list` --> Look at all uploaded illustrations
+- `/conversations/add` --> Upload new conversation (.graphml)
+- `/conversations` --> Look at all uploaded conversations
+- `/conversations/<uuid>` --> Download a conversation by UUID (ID)
+- `/illustrations/add` --> Upload new illustration (image)
+- `/illustrations` --> Look at all uploaded illustrations
 - `/illustration/<image_name>` --> View an illustration by name
 - `/`--> The landing page of the react app
 - `/browse` --> Browse the conversations to start

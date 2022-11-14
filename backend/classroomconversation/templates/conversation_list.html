@@ -18,7 +18,7 @@
     <td>{{ conversation.created|date:"d.m.Y" }} {{ conversation.created|time:"H:i" }}</td>
     <td>{{ conversation.name}}</td>
     <td>{{ conversation.description}}</td>
-    <td><a href="{{ conversation.document.url }}">{% trans "table.action.download" %}</a></td>
+    <td><a href="/conversations/{{ conversation.uuid }}">{% trans "table.action.download" %}</a></td>
     <td>
       <a
         target="_blank"

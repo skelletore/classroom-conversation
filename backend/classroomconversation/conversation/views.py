@@ -51,7 +51,7 @@ class CompletedConversationCreateAPIView(mixins.CreateModelMixin, viewsets.Gener
 ### VIEWS ###
 @login_required(login_url=LOGIN_URL)
 @permission_required("user.is_staff", raise_exception=True)
-def upload_document(request):
+def add_conversation(request):
     if request.method == "POST":
         form = ConversationForm(request.POST, request.FILES)
 
@@ -62,25 +62,35 @@ def upload_document(request):
                 File(conversation.document), conversation.uniform_probability
             )
             conversation.save()
-            return redirect("document_list")
+            return redirect("conversations")
         else:
             # TODO: pass errors
-            return render(request, "upload_document.html", {"form": form})
+            return render(request, "upload_conversation.html", {"form": form})
 
     form = ConversationForm()
-    return render(request, "upload_document.html", {"form": form})
+    return render(request, "upload_conversation.html", {"form": form})
+
+
+# TODO: Update (PATCH) document
+# TODO: Delete document
 
 
 @login_required(login_url=LOGIN_URL)
 @permission_required("user.is_staff", raise_exception=True)
-def document_list(request):
-    conversations = Conversation.objects.all().order_by("-created")
-    return render(request, "document_list.html", {"conversations": conversations})
+def get_all_conversations(request):
+    if request.method == "GET":
+        conversations = Conversation.objects.all().order_by("-created")
+        return render(request, "conversation_list.html", {"conversations": conversations})
+
+    return HttpResponseNotFound()
 
 
 @login_required(login_url=LOGIN_URL)
 @permission_required("user.is_staff", raise_exception=True)
-def upload_illustration(request):
+
+@login_required(login_url=LOGIN_URL)
+@permission_required("user.is_staff", raise_exception=True)
+def add_illustration(request):
     if request.method == "POST":
         form = IllustrationForm(request.POST, request.FILES)
 
@@ -89,11 +99,11 @@ def upload_illustration(request):
             illustration.uuid = str(uuid.uuid4())
             illustration.image = File(illustration.image)
             illustration.save()
-            return redirect("illustration_list")
+            return redirect("illustrations")
         except Exception as error:
             print(error)
             # TODO: Identify proper error responses
-            raise ValueError("An error occurded while uploading the file")
+            raise ValueError("An error occured while uploading the file")
         
     form = IllustrationForm()
     return render(request, "upload_illustration.html", {"form": form})
@@ -101,9 +111,12 @@ def upload_illustration(request):
 
 @login_required(login_url=LOGIN_URL)
 @permission_required("user.is_staff", raise_exception=True)
-def illustration_list(request):
-    illustrations = Illustration.objects.all().order_by("-created")
-    return render(request, "illustration_list.html", {"illustrations": illustrations})
+def get_all_illustrations(request):
+    if request.method == "GET":
+        illustrations = Illustration.objects.all().order_by("-created")
+        return render(request, "illustration_list.html", {"illustrations": illustrations})
+    
+    return HttpResponseNotFound()
 
 
 def get_illustration_by_name(request, image_name):

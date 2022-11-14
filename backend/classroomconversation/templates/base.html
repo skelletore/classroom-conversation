@@ -58,23 +58,23 @@
       <div class="links">
         <a class="navbar-brand" href="#">Admin</a>
         <a
-          class="nav-item nav-link {% if request.get_full_path == '/upload/list' %}active{% endif %}"
-          href="/upload/list"
+          class="nav-item nav-link {% if request.get_full_path == '/conversations' %}active{% endif %}"
+          href="/conversations"
           >{% trans "navigation.conversation" %}</a
         >
         <a
-          class="nav-item nav-link {% if request.get_full_path == '/upload' %}active{% endif %}"
-          href="/upload"
+          class="nav-item nav-link {% if request.get_full_path == '/conversations/add' %}active{% endif %}"
+          href="/conversations/add"
           >{% trans "navigation.upload" %}</a
         >
         <a
-          class="nav-item nav-link {% if request.get_full_path == '/illustration/list' %}active{% endif %}"
-          href="/illustration/list"
+          class="nav-item nav-link {% if request.get_full_path == '/illustrations' %}active{% endif %}"
+          href="/illustrations"
           >{% trans "navigation.illustration" %}</a
         >
         <a
-          class="nav-item nav-link {% if request.get_full_path == '/upload/illustration' %}active{% endif %}"
-          href="/upload/illustration"
+          class="nav-item nav-link {% if request.get_full_path == '/illustration/add' %}active{% endif %}"
+          href="/illustrations/add"
           >{% trans "navigation.upload_illustration" %}</a
         >
         <a
