@@ -19,17 +19,13 @@ ENV VENV_PATH=$VENV_PATH \
 ENV PATH="$VENV_PATH/bin:$PATH"
 
 WORKDIR $APP_ROOT
-VOLUME [ "$VENV_PATH" ]
-VOLUME [ "$APP_ROOT" ]
 VOLUME [ "$APP_ROOT/staticfiles" ]
 VOLUME [ "$APP_ROOT/mediafiles" ]
 
 RUN mkdir -p "$APP_ROOT/staticfiles" "$APP_ROOT/mediafiles"
 
-CMD ["gunicorn", "classroomconversation.wsgi:application", "--bind", "0.0.0.0:8000"]
-
 COPY pyproject.toml poetry.lock ./
-COPY classroomconversation ./
+COPY classroomconversation ./classroomconversation
 
 # Install packages and dependencies
 FROM base AS base-deps
@@ -39,7 +35,7 @@ RUN pip install -q --upgrade pip && \
     pip install -q poetry && \
     poetry config virtualenvs.in-project true
 
-### dev stage ###
+### DEVELOPMENT ###
 FROM base-deps AS app-dev
 ARG POETRY_INSTALL_ARGS
 ## Install dependencies
@@ -54,12 +50,11 @@ RUN apt-get update -qq && \
     apt-get install $APT_INSTALL_ARGS gettext && \
     rm -rf "/var/cache/apt/*" "/var/lib/apt/lists/*"
 
-COPY --from=app-dev $VENV_PATH/ $VENV_PATH/
+COPY --from=app-dev $VENV_PATH $VENV_PATH
 COPY .flake8 .bandit ./
-CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
-### END dev stage ###
+CMD ["python3", "classroomconversation/manage.py", "runserver", "0.0.0.0:8000"]
 
-### prod stage ###
+### PROD ###
 FROM base-deps AS app-prod
 ARG POETRY_INSTALL_ARGS
 RUN poetry install $POETRY_INSTALL_ARGS --no-dev
@@ -71,10 +66,11 @@ ARG VENV_PATH \
     RUN_AS_USER_UID
 COPY --from=app-prod $VENV_PATH $VENV_PATH
 
+CMD ["gunicorn", "classroomconversation.wsgi:application", "--bind", "0.0.0.0:8000"]
+
 # Set up user and permissions
 RUN useradd -Ms /bin/bash -u $RUN_AS_USER_UID $RUN_AS_USER_NAME
 RUN chown -R $RUN_AS_USER_NAME:$RUN_AS_USER_NAME $APP_ROOT
 RUN chmod -R 755 $APP_ROOT
 
 USER $RUN_AS_USER_NAME
-### END prod stage ###

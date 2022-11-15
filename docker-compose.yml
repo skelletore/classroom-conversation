@@ -31,8 +31,8 @@ services:
     links:
       - db
     volumes:
-      - static_vol:/app/staticfiles
-      - media_vol:/app/mediafiles
+      - static_vol:/app/classroomconversation/staticfiles
+      - media_vol:/app/classroomconversation/mediafiles
   frontend:
     image: classroom-conversation/frontend:prod
     build:

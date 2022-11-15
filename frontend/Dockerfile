@@ -1,7 +1,8 @@
-FROM node:16-alpine AS base
-
 ARG APP_ROOT=/app
 ARG RUN_AS_USER="1000"
+
+FROM node:16-alpine AS base
+ARG APP_ROOT
 
 WORKDIR $APP_ROOT
 COPY package.json craco.config.js ./
@@ -14,6 +15,9 @@ COPY jest.config.base.js jest.config.js tsconfig.json ./
 CMD ["yarn", "start"]
 
 FROM base AS production
+ARG APP_ROOT \
+    RUN_AS_USER
+
 RUN npm install -g serve
 RUN yarn build
 EXPOSE 3000

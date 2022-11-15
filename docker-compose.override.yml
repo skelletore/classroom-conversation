@@ -15,7 +15,7 @@ services:
       context: ./backend
       target: development
     volumes:
-      - ./backend/classroomconversation:/app
+      - ./backend/classroomconversation:/app/classroomconversation
     ports:
       - 5678:5678
     
