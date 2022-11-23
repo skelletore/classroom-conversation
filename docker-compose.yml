@@ -7,7 +7,7 @@ services:
       context: ./nginx
       target: production
     container_name: nginx
-    restart: unless-stopped
+    restart: always
     ports:
       - 80:80
       - 443:443
@@ -23,6 +23,7 @@ services:
       context: ./backend
       target: production
     container_name: backend
+    restart: always
     env_file:
       - backend.env
       - db.env
@@ -31,19 +32,21 @@ services:
     links:
       - db
     volumes:
-      - static_vol:/app/classroomconversation/staticfiles
-      - media_vol:/app/classroomconversation/mediafiles
+      - static_vol:/app/staticfiles
+      - media_vol:/app/mediafiles
   frontend:
     image: classroom-conversation/frontend:prod
     build:
       context: ./frontend
       target: production
     container_name: frontend
+    restart: always
     depends_on:
       - backend
   db:
     image: postgres
     container_name: db
+    restart: always
     volumes:
       - db_vol:/var/lib/postgresql/data
     env_file:

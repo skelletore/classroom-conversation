@@ -15,7 +15,11 @@ services:
       context: ./backend
       target: development
     volumes:
-      - ./backend/classroomconversation:/app/classroomconversation
+      - ./backend/classroomconversation/classroomconversation:/app/classroomconversation:ro
+      - ./backend/classroomconversation/conversation:/app/conversation:ro
+      - ./backend/classroomconversation/manage.py:/app/manage.py:ro
+      - ./backend/classroomconversation/templates:/app/templates
+      - ./backend/classroomconversation/locale:/app/locale
     ports:
       - 5678:5678
     

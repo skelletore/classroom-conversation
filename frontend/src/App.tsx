@@ -9,6 +9,7 @@ import Start from './Start/Start'
 
 import Browse from './Browse/Browse'
 import Credits from './Credits/Credits'
+import NotFound from './Notfound/Notfound'
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -64,6 +65,9 @@ function App() {
           path="/conversation/:uuid/:id"
           component={ConversationComponent}
         />
+        <Route
+          path="*"
+          component={NotFound} />
       </Switch>
     </Router>
   )

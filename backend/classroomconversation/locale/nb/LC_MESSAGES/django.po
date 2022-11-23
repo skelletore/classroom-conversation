@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-14 19:13+0000\n"
+"POT-Creation-Date: 2022-11-23 21:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,13 +72,14 @@ msgstr "Noen av nodene dine summerer ikke til 100%"
 msgid "validation.doc.illustration.invalid_src"
 msgstr "Ugyldig kilde for bildet"
 
-#: conversation/helpers.py:294
-msgid "heatmap.label.number"
-msgstr "Valg"
-
-#: conversation/helpers.py:294 conversation/helpers.py:296
+#: conversation/helpers.py:297 conversation/helpers.py:306
+#: conversation/helpers.py:316
 msgid "heatmap.label.frequency"
 msgstr "Frekvens"
+
+#: conversation/helpers.py:305
+msgid "heatmap.label.number"
+msgstr "Valg"
 
 #: conversation/validation.py:95
 msgid "validation.doc.no.star"
@@ -87,6 +88,11 @@ msgstr "Det finnes ingen startnode (stjerne)"
 #: conversation/validation.py:97
 msgid "validation.doc.multi.star"
 msgstr "Det finnes flere startnoder (stjerne). Det kan kun eksistere én"
+
+#: conversation/views.py:156 templates/conversation_list.html:9
+#: templates/illustration_list.html:9
+msgid "table.label.date"
+msgstr "Dato"
 
 #: templates/403.html:5
 msgid "403"
@@ -101,8 +107,8 @@ msgid "navigation.conversation"
 msgstr "Alle samtaler"
 
 #: templates/base.html:68
-msgid "navigation.upload"
-msgstr "Last opp"
+msgid "navigation.upload_conversation"
+msgstr "Last opp samtale"
 
 #: templates/base.html:73
 msgid "navigation.illustration"
@@ -123,11 +129,6 @@ msgstr "Bytt  "
 #: templates/base.html:105
 msgid "profile.hello"
 msgstr "Hei, "
-
-#: templates/conversation_list.html:9 templates/illustration_list.html:9
-#: templates/metrics_view.html:11
-msgid "table.label.date"
-msgstr "Dato"
 
 #: templates/conversation_list.html:10 templates/illustration_list.html:10
 msgid "table.label.name"
@@ -165,13 +166,15 @@ msgstr "Samtale"
 msgid "metrics.responses_for"
 msgstr "Responser for"
 
-#: templates/metrics_view.html:13
-msgid "table.label.choice"
-msgstr "Valg"
-
 #: templates/upload_conversation.html:11 templates/upload_illustration.html:11
 msgid "form.label.button"
 msgstr "Last opp"
+
+#~ msgid "navigation.upload"
+#~ msgstr "Last opp"
+
+#~ msgid "table.label.choice"
+#~ msgstr "Valg"
 
 #~ msgid "table.action.show_metrics"
 #~ msgstr "Vis"

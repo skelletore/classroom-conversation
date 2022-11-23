@@ -8,7 +8,7 @@ const Notfound = () => {
 
   return (
     <StyledNotfound>
-      <h1>Denne samtalen finnes ikke.</h1>
+      <h1>Denne siden finnes ikke.</h1>
       <p>Er du sikker på at du har riktig link?</p>
 
       <button onClick={() => history.push('/browse')}>Se alle samtaler</button>
